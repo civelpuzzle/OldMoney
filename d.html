@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Old Money | Аристократический маркетплейс</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #F5F0E8;  /* цвет старого пергамента */
+            font-family: 'Inter', sans-serif;
+            color: #2C2B28;
+        }
+
+        /* Цветовая палитра Old Money:
+           Темно-оливковый, шампань, приглушенный золотой, слоновая кость, глубокий изумруд */
+        :root {
+            --old-green: #2C4A3E;
+            --old-gold: #B68B40;
+            --old-cream: #FAF6F0;
+            --old-charcoal: #2E2B28;
+            --old-border: #E2D9CF;
+            --old-shadow: rgba(44, 42, 40, 0.08);
+            --old-card-bg: #FFFFFF;
+            --old-gold-light: #DAB066;
+        }
+
+        /* Типографика */
+        h1, h2, h3, .logo-text, .nav-category, .price-oldmoney {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Шапка — в стиле классического универмага */
+        .top-bar {
+            background-color: var(--old-green);
+            color: #EFE6DA;
+            font-size: 12px;
+            padding: 8px 0;
+            text-align: center;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(182, 139, 64, 0.3);
+        }
+
+        .main-header {
+            background-color: var(--old-cream);
+            border-bottom: 1px solid var(--old-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 18px 0;
+            gap: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .logo-icon {
+            font-size: 28px;
+            color: var(--old-gold);
+        }
+        .logo-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--old-green);
+            letter-spacing: 1px;
+        }
+        .logo-sub {
+            font-size: 10px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 2px;
+            color: #9B8E7C;
+            margin-left: 8px;
+        }
+
+        /* Поиск */
+        .search-wrapper {
+            flex: 1;
+            max-width: 500px;
+            min-width: 200px;
+        }
+        .search-box {
+            display: flex;
+            background: white;
+            border: 1px solid var(--old-border);
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px var(--old-shadow);
+            transition: 0.2s;
+        }
+        .search-box:focus-within {
+            border-color: var(--old-gold);
+            box-shadow: 0 0 0 3px rgba(182, 139, 64, 0.2);
+        }
+        .search-box input {
+            flex: 1;
+            padding: 12px 18px;
+            border: none;
+            font-size: 14px;
+            outline: none;
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .search-box button {
+            background: transparent;
+            border: none;
+            padding: 0 20px;
+            color: var(--old-green);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Иконки пользователя */
+        .header-icons {
+            display: flex;
+            gap: 28px;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--old-charcoal);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .icon-item i {
+            font-size: 22px;
+            color: var(--old-green);
+        }
+        .icon-item:hover { color: var(--old-gold); }
+
+        /* Категории навигация */
+        .nav-categories {
+            background-color: white;
+            border-bottom: 1px solid var(--old-border);
+            padding: 0;
+        }
+        .nav-list {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            padding: 14px 0;
+            flex-wrap: wrap;
+        }
+        .nav-list li {
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.3px;
+            color: var(--old-green);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .nav-list li:hover { color: var(--old-gold); border-bottom: 1px solid var(--old-gold);}
+
+        /* Баннер Old Money */
+        .heritage-banner {
+            background: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
+            margin: 28px 0 32px;
+            border-radius: 28px;
+            padding: 48px 40px;
+            color: #FCF8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .banner-text h2 {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+        .banner-text p {
+            font-size: 16px;
+            opacity: 0.85;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        .banner-btn {
+            background: transparent;
+            border: 1px solid var(--old-gold);
+            padding: 12px 32px;
+            border-radius: 40px;
+            color: #FCF8F0;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .banner-btn:hover {
+            background: var(--old-gold);
+            color: var(--old-green);
+        }
+
+        /* Секция товаров */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 40px 0 20px 0;
+            border-bottom: 1px solid var(--old-border);
+            padding-bottom: 8px;
+        }
+        .section-title h3 {
+            font-size: 28px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            color: var(--old-green);
+        }
+        .section-link {
+            font-size: 14px;
+            color: var(--old-gold);
+            cursor: pointer;
+        }
+
+        /* Сетка карточек - как Wildberries но с элегантными акцентами */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        .product-card {
+            background: var(--old-card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px var(--old-shadow);
+            border: 1px solid var(--old-border);
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 28px rgba(0,0,0,0.05);
+            border-color: var(--old-gold-light);
+        }
+        .card-img {
+            background: #F3EFE7;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .card-img i {
+            font-size: 72px;
+            color: #CBBFAA;
+        }
+        .badge-old {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--old-green);
+            color: #EADDBD;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+        .card-info {
+            padding: 16px;
+        }
+        .brand {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9B8E7C;
+            margin-bottom: 6px;
+        }
+        .product-title {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            color: #2C2B28;
+        }
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .current-price {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--old-green);
+        }
+        .old-price {
+            font-size: 14px;
+            color: #B9AE9C;
+            text-decoration: line-through;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--old-gold);
+        }
+        .rating i {
+            font-size: 12px;
+        }
+
+        /* Секция с премиум-брендами */
+        .prestige-row {
+            background: #FFFFFFE6;
+            border-radius: 32px;
+            margin: 20px 0 48px;
+            padding: 28px 24px;
+            border: 1px solid var(--old-border);
+        }
+        .brand-strip {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: center;
+        }
+        .brand-strip span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #8F826C;
+            letter-spacing: 1px;
+        }
+
+        /* футер в стиле old money */
+        footer {
+            background: var(--old-charcoal);
+            color: #DDD2C2;
+            margin-top: 60px;
+            padding: 48px 0 32px;
+            border-top: 2px solid var(--old-gold);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            margin-bottom: 18px;
+            color: var(--old-gold);
+            font-weight: 500;
+        }
+        .footer-col p, .footer-col li {
+            font-size: 13px;
+            line-height: 1.7;
+            list-style: none;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 28px;
+            border-top: 1px solid rgba(219, 197, 158, 0.2);
+            font-size: 12px;
+        }
+
+        /* адаптив */
+        @media (max-width: 768px) {
+            .header-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-wrapper {
+                max-width: 100%;
+            }
+            .heritage-banner {
+                padding: 32px 24px;
+                text-align: center;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .nav-list {
+                justify-content: center;
+                gap: 20px;
+            }
+        }
+        button {
+            background: none;
+            border: none;
+        }
+        .cart-count {
+            background: var(--old-gold);
+            color: #2C2B28;
+            font-size: 10px;
+            border-radius: 30px;
+            padding: 2px 6px;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <i class="fas fa-shipping-fast"></i> Бесплатная доставка по всему Санкт-Петербургу для избранных | 24/7 Консьерж-сервис
+</div>
+
+<div class="main-header">
+    <div class="container">
+        <div class="header-row">
+            <div class="logo-area">
+                <i class="fas fa-crown logo-icon"></i>
+                <span class="logo-text">OLD MONEY</span>
+                <span class="logo-sub">EST. 1905</span>
+            </div>
+            <div class="search-wrapper">
+                <div class="search-box">
+                    <input type="text" placeholder="Поиск среди люксовых брендов, кашемир, антиквариат...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="header-icons">
+                <div class="icon-item"><i class="far fa-heart"></i><span>Избранное</span></div>
+                <div class="icon-item"><i class="far fa-user"></i><span>Профиль</span></div>
+                <div class="icon-item"><i class="fas fa-shopping-bag"></i><span>Корзина <span class="cart-count">3</span></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="nav-categories">
+    <div class="container">
+        <ul class="nav-list">
+            <li>Кашемир & Шерсть</li>
+            <li>Аксессуары Heritage</li>
+            <li>Классическая обувь</li>
+            <li>Парфюмерия Niche</li>
+            <li>Дом & Интерьер</li>
+            <li>Ювелирный дом</li>
+            <li>Эксклюзивные часы</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+    <!-- баннер old money style -->
+    <div class="heritage-banner">
+        <div class="banner-text">
+            <h2>Коллекция осень-зима</h2>
+            <p>Наследие вкуса. Ткани ручной работы, британская классика и тихая роскошь.</p>
+        </div>
+        <button class="banner-btn">Исследовать <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <!-- первый ряд товаров (хиты) -->
+    <div class="section-title">
+        <h3>Иконы стиля</h3>
+        <div class="section-link">Все модели →</div>
+    </div>
+
+    <div class="product-grid" id="productsGrid">
+        <!-- карточки будут динамически рендериться через JS, но для красоты часть сразу прописана в html / но чтобы был единый макет, добавим статичные -->
+    </div>
+
+    <!-- премиум бренды strip -->
+    <div class="prestige-row">
+        <div class="brand-strip">
+            <span>BRUNELLO CUCINELLI</span>
+            <span>RALPH LAUREN PURPLE LABEL</span>
+            <span>LORO PIANA</span>
+            <span>HERMÈS</span>
+            <span>DRAKE'S</span>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <h3>Рекомендации для вас</h3>
+        <div class="section-link">Показать больше →</div>
+    </div>
+    <div class="product-grid" id="recommendationsGrid"></div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>OLD MONEY MARKET</h4>
+                <p>Маркетплейс с более чем вековой историей. Только оригинальные изделия премиум-сегмента.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Покупателям</h4>
+                <p>Доставка с курьером в белых перчатках</p>
+                <p>Примерка перед оплатой</p>
+                <p>Персональный стилист</p>
+            </div>
+            <div class="footer-col">
+                <h4>О нас</h4>
+                <p>История дома</p>
+                <p>Благотворительный фонд</p>
+                <p>Клуб Old Money</p>
+            </div>
+            <div class="footer-col">
+                <h4>Консьерж</h4>
+                <p>+7 (495) 777-88-99</p>
+                <p>concierge@oldmoney.ru</p>
+                <p>Ежедневно 10:00–21:00</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Old Money Marketplace — эстетика вне времени. Все права защищены.
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Товары в стиле old money - похоже на wildberries но сдержанная роскошь
+    const products = [
+        { id: 1, brand: "LORO PIANA", title: "Свитер из кашемира меринос", price: 78500, oldPrice: 98900, rating: 4.8, imgIcon: "fa-vest", badge: "Лимитированная серия" },
+        { id: 2, brand: "BRUNELLO CUCINELLI", title: "Льняной пиджак с шелком", price: 142500, oldPrice: 189000, rating: 4.9, imgIcon: "fa-user-tie", badge: "NEW" },
+        { id: 3, brand: "RALPH LAUREN", title: "Хлопковая рубашка оксфорд", price: 28900, oldPrice: 39000, rating: 4.7, imgIcon: "fa-shirt", badge: "Бестселлер" },
+        { id: 4, brand: "ZEGNA", title: "Трикотажные брюки в рубчик", price: 64900, oldPrice: 82000, rating: 4.8, imgIcon: "fa-trousers", badge: "" },
+        { id: 5, brand: "JOHN LOBB", title: "Дерби из патинированной кожи", price: 112000, oldPrice: 145000, rating: 5.0, imgIcon: "fa-shoe-prints", badge: "Handmade" },
+        { id: 6, brand: "HERMÈS", title: "Шелковый платок 'Бридж'", price: 58900, oldPrice: 69000, rating: 4.9, imgIcon: "fa-hand-peace", badge: "Архивный принт" },
+    ];
+
+    const recommendations = [
+        { id: 7, brand: "BURBERRY", title: "Тренчкот из вощеного хлопка", price: 115900, oldPrice: 149000, rating: 4.8, imgIcon: "fa-umbrella", badge: "Классика" },
+        { id: 8, brand: "TOD'S", title: "Гоммы с цепочкой", price: 52900, oldPrice: 69900, rating: 4.6, imgIcon: "fa-shoe-prints", badge: "" },
+        { id: 9, brand: "CANALI", title: "Костюм-двойка", price: 189000, oldPrice: 249000, rating: 4.9, imgIcon: "fa-user-tie", badge: "Made in Italy" },
+        { id: 10, brand: "ASPREY", title: "Серебряный портсигар", price: 43800, oldPrice: 56000, rating: 4.7, imgIcon: "fa-gem", badge: "Винтаж" },
+        { id: 11, brand: "FAIRFAX & FAVOR", title: "Веллингтоны замшевые", price: 42900, oldPrice: 54900, rating: 4.8, imgIcon: "fa-boot", badge: "Охота" },
+        { id: 12, brand: "ACQUA DI PARMA", title: "Диффузор Colonia", price: 18900, oldPrice: 24900, rating: 4.7, imgIcon: "fa-spray-can", badge: "Лимит" },
+    ];
+
+    function renderProductGrid(containerId, items) {
+        const container = document.getElementById(containerId);
+        if(!container) return;
+        container.innerHTML = '';
+        items.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            // иконка фа favicon (используем fa и подбираем более-менее)
+            let iconClass = item.imgIcon || 'fa-box-open';
+            const badgeHtml = item.badge ? `<span class="badge-old">${item.badge}</span>` : '';
+            card.innerHTML = `
+                <div class="card-img">
+                    ${badgeHtml}
+                    <i class="fas ${iconClass}" style="font-size: 70px; color: #CABDA8;"></i>
+                </div>
+                <div class="card-info">
+                    <div class="brand">${item.brand}</div>
+                    <div class="product-title">${item.title}</div>
+                    <div class="price-row">
+                        <span class="current-price">${item.price.toLocaleString('ru-RU')} ₽</span>
+                        <span class="old-price">${item.oldPrice.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i> ${item.rating}
+                        <span style="margin-left: 8px; color:#B9AE9C;">· отзывы: ${Math.floor(Math.random() * 200) + 20}</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // дополнительно добавляем еще 2 карточки, чтобы имитировать богатство выбора, но используем те же
+    // также покажем акцию "old money exclusive"
+    renderProductGrid('productsGrid', products);
+    renderProductGrid('recommendationsGrid', recommendations);
+
+    // добавляем интерактивности для hover (уже есть), а также консольный стиль
+    // имитация корзины (по клику алерт)
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if(e.target.closest('.product-card')) {
+                alert('Товар добавлен в корзину. Консьерж свяжется с вами для уточнения деталей доставки.');
+            }
+        });
+    });
+    const cartIcon = document.querySelector('.icon-item:last-child');
+    if(cartIcon) {
+        cartIcon.addEventListener('click', () => alert('Корзина: 3 предмета. Общая стоимость 247 200 ₽'));
+    }
+    // поиск эмуляция
+    const searchBtn = document.querySelector('.search-box button');
+    const searchInput = document.querySelector('.search-box input');
+    if(searchBtn) {
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if(query) alert(`Поиск в архиве Old Money: "${query}". Наши стилисты подберут варианты.`);
+            else alert('Введите запрос, например, "кашемир" или "оксфорд"');
+        });
+    }
+    // баннер кнопка
+    const bannerButton = document.querySelector('.banner-btn');
+    if(bannerButton) {
+        bannerButton.addEventListener('click', () => {
+            alert('Открывается новая коллекция “Timeless Heritage” — эксклюзивный показ для участников клуба.');
+        });
+    }
+    // навигация категории
+    const navItems = document.querySelectorAll('.nav-list li');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            alert(`Категория «${item.innerText}» — скоро будет доступен каталог премиальных товаров.`);
+        });
+    });
+    // также добавим лёгкую анимацию к заголовкам
+    console.log('Old Money Wildberries макет загружен — стиль, роскошь, наследие');
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100.000000" height="100.000000" fill="none">
+	<defs>
+		<clipPath id="clipPath_0">
+			<rect width="96.000000" height="96.000000" x="2.000000" y="2.000000" fill="rgb(255,255,255)" />
+		</clipPath>
+	</defs>
+	<rect id="icon" width="100.000000" height="100.000000" x="0.000000" y="0.000000" />
+	<g id="people" customFrame="url(#clipPath_0)">
+		<rect id="people" width="96.000000" height="96.000000" x="2.000000" y="2.000000" />
+		<circle id="Эллипс 3" cx="50" cy="50" r="48" fill="rgb(34,51,59)" />
+		<path id="Вектор 3" d="M74.8571 76L25.1429 76C21.8286 76 21 72.7619 21 71.1429C21 47.8286 40.3333 42 50 42C59.6667 42 79 47.8286 79 71.1429C79 72.7619 78.1714 76 74.8571 76Z" fill="rgb(230,228,216)" fill-rule="evenodd" />
+		<path id="Эллипс 2" d="M38 26C38 19.3726 43.3726 14 50 14C56.6274 14 62 19.3726 62 26C62 32.6274 56.6274 38 50 38C43.3726 38 38 32.6274 38 26Z" fill="rgb(230,228,216)" fill-rule="evenodd" />
+	</g>
+</svg>
