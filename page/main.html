@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,6 @@
             color: #2C2B28;
         }
 
-        /* Цветовая палитра Old Money */
         :root {
             --old-green: #2C4A3E;
             --old-gold: #B68B40;
@@ -36,7 +35,6 @@
             --old-card-bg: #FFFFFF;
         }
 
-        /* Основной контент (растягивается, прижимая footer вниз) */
         main {
             flex: 1;
             display: grid;
@@ -44,15 +42,13 @@
             gap: 20px;
             padding: 20px;
             background-color: #F5F0E8;
-            transition: grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: grid-template-columns 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         
-        /* Состояние когда меню свернуто - левая колонка становится auto (под ширину триггера) */
         main.menu-collapsed {
             grid-template-columns: auto 7fr 3fr;
         }
 
-        /* Header */
         header {
             background: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
             width: 100%;
@@ -65,7 +61,6 @@
             border-bottom: 1px solid rgba(182, 139, 64, 0.3);
         }
         
-        /* Логотип в header */
         .header-logo {
             display: flex;
             align-items: baseline;
@@ -101,7 +96,6 @@
             margin-left: 4px;
         }
 
-        /* Footer */
         footer {
             background-color: var(--old-charcoal);
             width: 100%;
@@ -115,7 +109,6 @@
             font-size: 13px;
         }
 
-        /* Контейнер меню (бургер) - левая колонка */
         .burger-container {
             position: relative;
             display: flex;
@@ -124,19 +117,17 @@
             width: 100%;
         }
         
-        /* Меню (бургер) - левая колонка */
         .burger {
             display: flex;
             flex-direction: column;
             gap: 15px;
             padding: 10px;
             width: 100%;
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             opacity: 1;
             transform: translateX(0);
         }
         
-        /* Кнопка-триггер для разворачивания (узкая высокая кнопка, появляется слева) */
         .burger-trigger {
             display: none;
             width: 60px;
@@ -145,7 +136,7 @@
             background: linear-gradient(135deg, #2C4A3E, #3F6B58);
             border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             box-shadow: 4px 4px 12px rgba(0,0,0,0.15);
             writing-mode: vertical-rl;
             text-orientation: mixed;
@@ -165,124 +156,60 @@
             letter-spacing: 2px;
         }
         
-        .burger-trigger::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(182, 139, 64, 0.2), rgba(218, 176, 102, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .burger-trigger:hover::before {
-            opacity: 1;
-        }
-        
         .burger-trigger:hover {
             transform: scale(1.02);
             background: linear-gradient(135deg, #3F6B58, #2C4A3E);
-            box-shadow: 6px 6px 16px rgba(0,0,0,0.2);
             border-color: var(--old-gold-light);
-        }
-        
-        .burger-trigger span {
-            display: inline-block;
-            letter-spacing: 2px;
-            font-size: 15px;
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
         .burger-trigger .trigger-icon {
             font-size: 32px;
-            margin-bottom: 12px;
             writing-mode: horizontal-tb;
             display: inline-block;
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-        
-        /* Анимация для появления триггера */
-        .menu-collapsed .burger-container {
-            justify-content: flex-start;
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         
         .menu-collapsed .burger-container .burger-trigger {
             display: flex;
-            animation: triggerSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: triggerSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
         }
         
         @keyframes triggerSlideIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95) translateX(-10px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateX(0);
-            }
+            0% { opacity: 0; transform: scale(0.95) translateX(-10px); }
+            100% { opacity: 1; transform: scale(1) translateX(0); }
         }
         
-        /* Анимация для скрытия меню */
         .menu-collapsed .burger-container .burger {
-            animation: menuSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: menuSlideOut 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
             display: none;
         }
         
         @keyframes menuSlideOut {
-            0% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(-20px); }
         }
         
-        /* Анимация для появления меню */
         .burger-container .burger {
-            animation: menuSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: menuSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         
         @keyframes menuSlideIn {
-            0% {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
         }
         
-        /* Скрытие триггера при развернутом меню */
         .burger-container .burger-trigger {
-            animation: triggerSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: triggerSlideOut 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
         }
         
         @keyframes triggerSlideOut {
-            0% {
-                opacity: 1;
-                transform: scale(1) translateX(0);
-                display: flex;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0.95) translateX(-10px);
-                display: none;
-            }
+            0% { opacity: 1; transform: scale(1) translateX(0); display: flex; }
+            100% { opacity: 0; transform: scale(0.95) translateX(-10px); display: none; }
         }
 
         .burger button {
@@ -304,32 +231,14 @@
             color: #2C4A3E;
             font-weight: 500;
         }
-
-        .burger button img {
-            width: 22px;
-            height: 22px;
-            vertical-align: middle;
-            filter: brightness(0) saturate(100%) invert(28%) sepia(27%) saturate(545%) hue-rotate(110deg) brightness(94%) contrast(88%);
-        }
-
+        
         .burger button:hover {
             transform: translateX(5px) scale(1.02);
             color: var(--old-gold);
             background-color: #FFFFFF;
             border-color: var(--old-gold);
-            box-shadow: 4px 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .burger button:hover img {
-            filter: brightness(0) saturate(100%) invert(61%) sepia(43%) saturate(853%) hue-rotate(4deg) brightness(92%) contrast(87%);
-        }
-        
-        /* Активная кнопка */
-        .burger button:active {
-            transform: translateX(2px) scale(0.98);
         }
 
-        /* Центральный контейнер (основной контент) */
         .mainContainer {
             background-color: #FFFFFF;
             border: 1px solid var(--old-border);
@@ -345,7 +254,72 @@
             box-shadow: 0 4px 12px var(--old-shadow);
         }
         
-        /* Скелетон загрузки */
+        .mainContainer-element {
+            border: 1px solid var(--old-border);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 0.5fr;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #FAF6F0;
+            gap: 12px;
+        }
+        
+        .mainContainer-element:hover {
+            background: linear-gradient(97deg, #FAF6F0 0%, #FFFFFF 100%);
+            transform: translateX(6px) scale(1.01);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            border-color: var(--old-gold);
+        }
+        
+        .item-name {
+            font-weight: 600;
+            font-size: 17px;
+            color: var(--old-green);
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        .item-category {
+            text-align: left;
+            font-weight: 500;
+            color: #5C6E5A;
+        }
+        
+        .item-price {
+            text-align: left;
+            font-weight: 500;
+            color: var(--old-gold);
+        }
+        
+        .item-date {
+            text-align: left;
+            font-size: 13px;
+            color: #9B8E7C;
+        }
+        
+        .delete-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #C9BFAE;
+            font-size: 18px;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .delete-btn:hover {
+            color: #D1664A;
+            background-color: rgba(209, 102, 74, 0.1);
+            transform: scale(1.1);
+        }
+
         .skeleton {
             background: linear-gradient(90deg, #F5F0E8 25%, #E8E2D8 50%, #F5F0E8 75%);
             background-size: 200% 100%;
@@ -354,12 +328,8 @@
         }
         
         @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
         
         .skeleton-element {
@@ -369,7 +339,6 @@
             height: 80px;
         }
 
-        /* Правый виджет (информация о пользователе) */
         .userWidget {
             display: flex;
             flex-direction: column;
@@ -410,147 +379,233 @@
             font-weight: 500;
         }
         
-        .userInfo-text .user-name {
+        .user-name {
             font-size: 22px;
             font-weight: 600;
             color: var(--old-green);
             font-family: 'Cormorant Garamond', serif;
         }
         
-        .userInfo-text .user-date {
-            font-size: 16px;
-            color: #8F826C;
+        .stats-info {
+            margin-top: 15px;
+            border-top: 1px solid var(--old-border);
+            padding-top: 15px;
+            width: 100%;
+        }
+        
+        .stats-info p {
+            font-size: 14px;
+            color: #5C6E5A;
+            margin: 8px 0;
         }
 
-        .mainContainer-element {
-            border: 1px solid var(--old-border);
-            border-radius: 16px;
-            padding: 18px 24px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(44, 42, 40, 0.85);
+            z-index: 2000;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: #FAF6F0;
+            justify-content: center;
         }
         
-        .mainContainer-element:hover {
-            background: linear-gradient(97deg, #FAF6F0 0%, #FFFFFF 100%);
-            transform: translateX(6px) scale(1.01);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-            border-color: var(--old-gold);
+        .modal.active {
+            display: flex;
         }
         
-        .mainContainer-element span:first-child {
-            font-weight: 600;
-            font-size: 17px;
-            color: var(--old-green);
+        .modal-content {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+            border: 1px solid var(--old-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes modalSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
             font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--old-green);
         }
         
-        .mainContainer-element span:nth-child(2) {
-            text-align: center;
-            font-weight: 500;
-            color: #5C6E5A;
-        }
-        
-        .mainContainer-element span:last-child {
-            text-align: right;
-            font-size: 13px;
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
             color: #9B8E7C;
+            cursor: pointer;
+            transition: color 0.2s;
         }
         
-        /* Стили для пустого состояния */
+        .modal-close:hover {
+            color: var(--old-gold);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--old-green);
+            font-size: 0.9rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--old-border);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #FAF6F0;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--old-gold);
+            box-shadow: 0 0 0 3px rgba(182, 139, 64, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--old-green);
+            color: #FAF6F0;
+        }
+        
+        .btn-primary:hover {
+            background: var(--old-gold);
+            color: var(--old-charcoal);
+        }
+        
+        .btn-secondary {
+            background: #E2D9CF;
+            color: var(--old-green);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--old-border);
+        }
+        
+        .btn-gold {
+            background: var(--old-gold);
+            color: #FAF6F0;
+        }
+        
+        .btn-gold:hover {
+            background: var(--old-green);
+        }
+        
+        .report-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .report-option {
+            padding: 1rem;
+            border: 2px solid var(--old-border);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            background: #FAF6F0;
+        }
+        
+        .report-option:hover, .report-option.selected {
+            border-color: var(--old-gold);
+            background: rgba(182, 139, 64, 0.1);
+        }
+        
+        .report-option-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
         .empty-state {
             text-align: center;
             padding: 60px 40px;
             color: #9B8E7C;
             font-size: 18px;
         }
-
-        /* Адаптивность для мобильных устройств */
+        
         @media (max-width: 768px) {
             main {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
             main.menu-collapsed {
                 grid-template-columns: 1fr;
             }
-            
-            header {
-                padding: 0 20px;
-                height: 90px;
-            }
-            
-            .logo-text {
-                font-size: 24px;
-            }
-            
-            .logo-icon {
-                font-size: 28px;
-            }
-            
-            .burger-container {
-                order: 1;
-                min-height: auto;
-                width: 100%;
-            }
-            
             .burger {
-                order: 1;
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-                width: 100%;
             }
-            
             .burger button {
                 width: auto;
                 min-width: 120px;
                 justify-content: center;
-                font-size: 14px;
-                padding: 10px 16px;
             }
-            
-            .burger-trigger {
-                width: 100%;
-                height: 70px !important;
-                writing-mode: horizontal-tb;
-                flex-direction: row;
-                min-height: auto;
+            .mainContainer-element {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                text-align: center;
             }
-            
-            .burger-trigger .trigger-icon {
-                writing-mode: horizontal-tb;
-                margin-bottom: 0;
-                margin-right: 12px;
+            .item-category, .item-price, .item-date, .delete-btn {
+                text-align: center;
+                justify-self: center;
             }
-            
-            .menu-collapsed .burger-container .burger-trigger {
-                display: flex;
-                width: 100%;
-            }
-            
-            .mainContainer {
-                order: 2;
-            }
-            
-            .userWidget {
-                order: 3;
-                position: static;
-            }
-            
-            .userWidget .iconInfo {
-                width: 100px;
-                height: 100px;
+            .report-options {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-<body class="Main">
-    
+<body>
     <header>
         <div class="header-logo" id="headerLogo">
             <i class="fas fa-crown logo-icon"></i>
@@ -560,19 +615,15 @@
     </header>
 
     <main>
-        <!-- Левая колонка: контейнер с меню и триггером -->
         <div class="burger-container">
-            <!-- Полное меню (бургер) -->
             <div class="burger">
                 <button type="button" data-page="main"><i class="fas fa-home"></i> Главная</button>
-                <button type="button" data-page="favorite" onclick="window.location.href='favorite.html';"><i class="far fa-heart"></i> Желаемое</button>
-                <button type="button" data-page="search" onclick="window.location.href='search.html';"><i class="fas fa-search"></i> Поиск</button>
-                <button type="button" data-action="create-collection"><i class="fas fa-pen-fancy"></i> Создать коллекцию</button>
-                <button type="button" data-action="import"><i class="fas fa-upload"></i> Импорт</button>
+                <button type="button" onclick="window.location.href='favorite.html'"><i class="far fa-heart"></i> Желаемое</button>
+                <button type="button" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> Поиск</button>
+                <button type="button" id="addItemBtn"><i class="fas fa-plus-circle"></i> Добавить предмет</button>
+                <button type="button" id="exportImportBtn"><i class="fas fa-file-export"></i> Импорт / Экспорт</button>
                 <button type="button" id="collapseMenuBtn"><i class="fas fa-compress-alt"></i> Свернуть</button>
             </div>
-            
-            <!-- Узкая высокая кнопка для разворачивания меню -->
             <div class="burger-trigger" id="expandMenuBtn">
                 <span class="trigger-icon">☰</span>
                 <span>МЕНЮ</span>
@@ -580,7 +631,6 @@
         </div>
 
         <div class="mainContainer" id="mainContainer">
-            <!-- Контент будет загружаться динамически -->
             <div class="skeleton-element skeleton"></div>
             <div class="skeleton-element skeleton"></div>
             <div class="skeleton-element skeleton"></div>
@@ -592,248 +642,412 @@
                 <div class="skeleton" style="height: 30px; width: 200px; margin: 10px auto;"></div>
                 <div class="skeleton" style="height: 25px; width: 180px; margin: 10px auto;"></div>
             </div>
+            <div class="stats-info" id="statsInfo">
+                <p><i class="fas fa-box"></i> Всего предметов: <span id="totalItemsCount">0</span></p>
+                <p><i class="fas fa-coins"></i> Общая стоимость: <span id="totalValue">0 ₽</span></p>
+            </div>
         </div>
-    </main> 
+    </main>
 
     <footer>
         <span>© 2025 OLD MONEY — Коллекции вне времени</span>
     </footer>
 
+    <!-- Модальное окно: Добавить предмет -->
+    <div class="modal" id="addItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Добавить предмет</h3>
+                <button class="modal-close" onclick="closeModal('addItemModal')">&times;</button>
+            </div>
+            <form id="addItemForm">
+                <div class="form-group">
+                    <label class="form-label">Название предмета</label>
+                    <input type="text" class="form-input" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Категория / Тип коллекции</label>
+                    <input type="text" class="form-input" id="itemCategory" placeholder="Например: Рубашка, Часы, Живопись" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Стоимость (₽)</label>
+                    <input type="number" class="form-input" id="itemPrice" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Дата получения</label>
+                    <input type="date" class="form-input" id="itemDate" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addItemModal')">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Импорт / Экспорт -->
+    <div class="modal" id="exportImportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Импорт / Экспорт отчёта</h3>
+                <button class="modal-close" onclick="closeModal('exportImportModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Тип отчёта</label>
+                <div class="report-options">
+                    <div class="report-option selected" data-type="all">
+                        <div class="report-option-icon">📊</div>
+                        <div class="report-option-label">Все предметы</div>
+                    </div>
+                    <div class="report-option" data-type="category">
+                        <div class="report-option-icon">📁</div>
+                        <div class="report-option-label">По категориям</div>
+                    </div>
+                    <div class="report-option" data-type="period">
+                        <div class="report-option-icon">📅</div>
+                        <div class="report-option-label">За период</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" id="categorySelectGroup" style="display: none;">
+                <label class="form-label">Категория</label>
+                <select class="form-select" id="reportCategory"></select>
+            </div>
+            <div class="form-group" id="periodSelectGroup" style="display: none;">
+                <label class="form-label">Период</label>
+                <div style="display: flex; gap: 1rem;">
+                    <input type="date" class="form-input" id="dateFrom">
+                    <input type="date" class="form-input" id="dateTo">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Сортировка</label>
+                <select class="form-select" id="sortType">
+                    <option value="date-desc">По дате (новые)</option>
+                    <option value="date-asc">По дате (старые)</option>
+                    <option value="price-desc">По стоимости (дорогие)</option>
+                    <option value="price-asc">По стоимости (дешёвые)</option>
+                    <option value="name-asc">По названию (А-Я)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Формат экспорта</label>
+                <select class="form-select" id="exportFormat">
+                    <option value="csv">CSV (Excel)</option>
+                    <option value="json">JSON</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('exportImportModal')">Отмена</button>
+                <button type="button" class="btn btn-primary" id="exportReportBtn">Выгрузить отчёт</button>
+                <button type="button" class="btn btn-gold" id="importDataBtn">Импорт данных</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // ==================== Глобальные переменные ====================
-        let collectionsData = [];
-        let userData = null;
+        // -------------------- ДАННЫЕ --------------------
+        let items = [];
+        let userData = { name: "Александр Петров", registrationDate: "2024-05-10T00:00:00Z" };
         
-        // ==================== API эмуляция (заглушки для backend) ====================
-        async function fetchCollections() {
-            await new Promise(resolve => setTimeout(resolve, 800));
-            return [
-                { id: 1, name: "Винтажные фотографии", count: 45, createdAt: "2024-12-05T10:00:00Z" },
-                { id: 2, name: "Природа и пейзажи", count: 67, createdAt: "2024-11-18T14:30:00Z" },
-                { id: 3, name: "Города мира", count: 33, createdAt: "2024-10-29T09:15:00Z" },
-                { id: 4, name: "Архитектурные шедевры", count: 19, createdAt: "2024-09-03T16:45:00Z" },
-                { id: 5, name: "Современное искусство", count: 28, createdAt: "2024-08-14T11:20:00Z" },
-                { id: 6, name: "Путешествия и приключения", count: 56, createdAt: "2024-07-22T13:10:00Z" },
-                { id: 7, name: "Любимые моменты", count: 41, createdAt: "2024-06-09T08:30:00Z" },
-                { id: 8, name: "Портреты", count: 23, createdAt: "2025-01-15T12:00:00Z" },
-                { id: 9, name: "Уличная фотография", count: 34, createdAt: "2025-02-20T15:45:00Z" },
-                { id: 10, name: "Макросъемка", count: 17, createdAt: "2025-03-01T10:30:00Z" }
-            ];
+        function loadItemsFromStorage() {
+            const stored = localStorage.getItem('collectionItems');
+            if (stored) {
+                items = JSON.parse(stored);
+            } else {
+                items = [
+                    { id: 1, name: "Рубашка Louis Vuitton", category: "Одежда", price: 10000, acquisitionDate: "2005-10-10" },
+                    { id: 2, name: "Картина 'Старый особняк'", category: "Искусство", price: 450000, acquisitionDate: "2023-05-15" },
+                    { id: 3, name: "Часы Patek Philippe", category: "Часы", price: 1250000, acquisitionDate: "2024-02-20" },
+                    { id: 4, name: "Монета 1898 года", category: "Нумизматика", price: 95000, acquisitionDate: "2024-01-10" },
+                    { id: 5, name: "Кожаный портфель Hermès", category: "Аксессуары", price: 340000, acquisitionDate: "2025-03-01" }
+                ];
+                saveItemsToStorage();
+            }
         }
         
-        async function fetchUserInfo() {
-            await new Promise(resolve => setTimeout(resolve, 600));
-            return {
-                name: "Александр Петров",
-                registrationDate: "2024-05-10T00:00:00Z",
-                email: "alex@example.com"
-            };
+        function saveItemsToStorage() {
+            localStorage.setItem('collectionItems', JSON.stringify(items));
         }
         
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ru-RU', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('ru-RU');
+        }
+        
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ru-RU').format(price) + " ₽";
+        }
+        
+        function updateStats() {
+            document.getElementById('totalItemsCount').innerText = items.length;
+            const total = items.reduce((sum, i) => sum + i.price, 0);
+            document.getElementById('totalValue').innerText = formatPrice(total);
+        }
+        
+        function renderItems() {
+            const container = document.getElementById('mainContainer');
+            if (!container) return;
+            if (items.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open" style="font-size: 48px;"></i><p>Коллекция пуста. Добавьте первый предмет!</p></div>`;
+                updateStats();
+                return;
+            }
+            container.innerHTML = items.map(item => `
+                <div class="mainContainer-element" data-id="${item.id}">
+                    <span class="item-name">${escapeHtml(item.name)}</span>
+                    <span class="item-category">${escapeHtml(item.category)}</span>
+                    <span class="item-price">${formatPrice(item.price)}</span>
+                    <span class="item-date">${formatDate(item.acquisitionDate)}</span>
+                    <button class="delete-btn" data-id="${item.id}" title="Удалить предмет"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    if (confirm('Удалить предмет из коллекции?')) {
+                        removeItemById(id);
+                    }
+                });
             });
+            
+            // Убираем alert при клике на карточку — ничего не делаем
+            updateStats();
+        }
+        
+        function removeItemById(id) {
+            items = items.filter(i => i.id !== id);
+            saveItemsToStorage();
+            renderItems();
+            showNotification('Предмет удалён');
         }
         
         function escapeHtml(str) {
             if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-        
-        function renderCollections(collections) {
-            const container = document.getElementById('mainContainer');
-            if (!container) return;
-            
-            if (!collections || collections.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-open" style="font-size: 64px; margin-bottom: 20px; opacity: 0.5;"></i>
-                        <p>У вас пока нет коллекций</p>
-                        <p style="font-size: 14px; margin-top: 10px;">Создайте первую коллекцию, нажав кнопку "Создать коллекцию"</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = collections.map(collection => `
-                <div class="mainContainer-element" data-collection-id="${collection.id}">
-                    <span>${escapeHtml(collection.name)}</span>
-                    <span>Количество: ${collection.count}</span>
-                    <span>${formatDate(collection.createdAt)}</span>
-                </div>
-            `).join('');
-            
-            document.querySelectorAll('.mainContainer-element').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    const collectionId = el.dataset.collectionId;
-                    const collection = collections.find(c => c.id == collectionId);
-                    if (collection) {
-                        alert(`Открытие коллекции: ${collection.name}\nКоличество изображений: ${collection.count}`);
-                    }
-                });
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
             });
         }
         
-        function renderUserInfo(user) {
-            const userInfoContainer = document.getElementById('userInfo');
-            if (!userInfoContainer) return;
-            
-            userInfoContainer.innerHTML = `
-                <p class="user-name">Здравствуйте, ${escapeHtml(user.name)}!</p>
-                <p class="user-date">Дата регистрации: ${formatDate(user.registrationDate)}</p>
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.textContent = message;
+            notif.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                background: var(--old-green);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 40px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            `;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notif.remove(), 300);
+            }, 2000);
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        async function loadUserInfo() {
+            await new Promise(r => setTimeout(r, 300));
+            const userDiv = document.getElementById('userInfo');
+            userDiv.innerHTML = `
+                <p class="user-name">Здравствуйте, ${escapeHtml(userData.name)}!</p>
+                <p class="user-date">Дата регистрации: ${formatDate(userData.registrationDate)}</p>
             `;
         }
         
-        async function loadAllData() {
-            try {
-                const [collections, user] = await Promise.all([
-                    fetchCollections(),
-                    fetchUserInfo()
-                ]);
-                
-                collectionsData = collections;
-                userData = user;
-                
-                renderCollections(collectionsData);
-                renderUserInfo(userData);
-                
-                localStorage.setItem('cachedCollections', JSON.stringify(collectionsData));
-                localStorage.setItem('cachedUser', JSON.stringify(userData));
-                
-            } catch (error) {
-                console.error('Ошибка загрузки данных:', error);
-                const container = document.getElementById('mainContainer');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 16px; color: var(--old-gold);"></i>
-                            <p>Ошибка загрузки данных</p>
-                            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 24px; background: var(--old-green); color: white; border: none; border-radius: 40px; cursor: pointer; font-family: inherit;">Обновить</button>
-                        </div>
-                    `;
-                }
+        // -------------------- МОДАЛЬНЫЕ ОКНА --------------------
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        window.closeModal = closeModal;
+        
+        document.getElementById('addItemForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('itemName').value.trim();
+            const category = document.getElementById('itemCategory').value.trim();
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            const date = document.getElementById('itemDate').value;
+            if (!name || !category || isNaN(price) || !date) return;
+            const newId = Date.now();
+            items.push({ id: newId, name, category, price, acquisitionDate: date });
+            saveItemsToStorage();
+            renderItems();
+            closeModal('addItemModal');
+            e.target.reset();
+            showNotification('Предмет добавлен');
+        });
+        
+        const exportImportBtn = document.getElementById('exportImportBtn');
+        if (exportImportBtn) exportImportBtn.addEventListener('click', () => openModal('exportImportModal'));
+        
+        function updateCategorySelect() {
+            const cats = [...new Set(items.map(i => i.category))];
+            const select = document.getElementById('reportCategory');
+            if (select) {
+                select.innerHTML = '<option value="all">Все категории</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
             }
         }
         
-        // ==================== Функционал сворачивания меню ====================
+        document.querySelectorAll('.report-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.report-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                const type = opt.dataset.type;
+                document.getElementById('categorySelectGroup').style.display = type === 'category' ? 'block' : 'none';
+                document.getElementById('periodSelectGroup').style.display = type === 'period' ? 'block' : 'none';
+                if (type === 'category') updateCategorySelect();
+            });
+        });
+        
+        document.getElementById('exportReportBtn')?.addEventListener('click', () => {
+            const type = document.querySelector('.report-option.selected').dataset.type;
+            const sort = document.getElementById('sortType').value;
+            const format = document.getElementById('exportFormat').value;
+            let filtered = [...items];
+            if (type === 'category') {
+                const cat = document.getElementById('reportCategory').value;
+                if (cat !== 'all') filtered = filtered.filter(i => i.category === cat);
+            } else if (type === 'period') {
+                const from = document.getElementById('dateFrom').value;
+                const to = document.getElementById('dateTo').value;
+                if (from) filtered = filtered.filter(i => i.acquisitionDate >= from);
+                if (to) filtered = filtered.filter(i => i.acquisitionDate <= to);
+            }
+            filtered.sort((a,b) => {
+                if (sort === 'date-desc') return new Date(b.acquisitionDate) - new Date(a.acquisitionDate);
+                if (sort === 'date-asc') return new Date(a.acquisitionDate) - new Date(b.acquisitionDate);
+                if (sort === 'price-desc') return b.price - a.price;
+                if (sort === 'price-asc') return a.price - b.price;
+                if (sort === 'name-asc') return a.name.localeCompare(b.name);
+                return 0;
+            });
+            const timestamp = new Date().toISOString().slice(0,10);
+            if (format === 'csv') {
+                let csv = "Название,Категория,Стоимость (₽),Дата получения\n";
+                filtered.forEach(i => {
+                    csv += `"${i.name}","${i.category}",${i.price},"${i.acquisitionDate}"\n`;
+                });
+                const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `old_money_report_${timestamp}.csv`;
+                link.click();
+            } else if (format === 'json') {
+                const json = JSON.stringify(filtered, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `old_money_report_${timestamp}.json`;
+                link.click();
+            }
+            closeModal('exportImportModal');
+            showNotification('Отчёт выгружен');
+        });
+        
+        document.getElementById('importDataBtn')?.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv,.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        let imported = [];
+                        if (file.name.endsWith('.json')) {
+                            imported = JSON.parse(ev.target.result);
+                            if (!Array.isArray(imported)) throw new Error('Не массив');
+                        } else if (file.name.endsWith('.csv')) {
+                            const text = ev.target.result;
+                            const lines = text.split('\n').slice(1);
+                            for (let line of lines) {
+                                if (!line.trim()) continue;
+                                const parts = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+                                if (parts && parts.length >= 4) {
+                                    const name = parts[0].replace(/^"|"$/g, '');
+                                    const category = parts[1].replace(/^"|"$/g, '');
+                                    const price = parseFloat(parts[2]);
+                                    const date = parts[3].replace(/^"|"$/g, '');
+                                    if (name && category && !isNaN(price) && date) {
+                                        imported.push({ id: Date.now() + Math.random(), name, category, price, acquisitionDate: date });
+                                    }
+                                }
+                            }
+                        }
+                        if (imported.length) {
+                            items.push(...imported);
+                            saveItemsToStorage();
+                            renderItems();
+                            showNotification(`Импортировано ${imported.length} предметов`);
+                        } else {
+                            alert('Некорректные данные или пустой файл');
+                        }
+                        closeModal('exportImportModal');
+                    } catch(err) {
+                        alert('Ошибка импорта: ' + err.message);
+                    }
+                };
+                reader.readAsText(file, 'UTF-8');
+            };
+            input.click();
+        });
+        
+        // -------------------- СВОРАЧИВАНИЕ МЕНЮ --------------------
         const mainElement = document.querySelector('main');
         const collapseMenuBtn = document.getElementById('collapseMenuBtn');
         const expandMenuBtn = document.getElementById('expandMenuBtn');
-        
-        function collapseMenu() {
-            if (!mainElement.classList.contains('menu-collapsed')) {
-                mainElement.classList.add('menu-collapsed');
-                localStorage.setItem('menuCollapsed', 'true');
-                setTimeout(adjustTriggerHeight, 400);
-            }
-        }
-        
-        function expandMenu() {
-            if (mainElement.classList.contains('menu-collapsed')) {
-                mainElement.classList.remove('menu-collapsed');
-                localStorage.setItem('menuCollapsed', 'false');
-                setTimeout(adjustTriggerHeight, 400);
-            }
-        }
-        
-        if (collapseMenuBtn) {
-            collapseMenuBtn.addEventListener('click', collapseMenu);
-        }
-        
-        if (expandMenuBtn) {
-            expandMenuBtn.addEventListener('click', expandMenu);
-        }
-        
-        const savedState = localStorage.getItem('menuCollapsed');
-        if (savedState === 'true') {
-            mainElement.classList.add('menu-collapsed');
-        }
-        
-        // Обработчики действий
-        const createCollectionBtn = document.querySelector('[data-action="create-collection"]');
-        if (createCollectionBtn) {
-            createCollectionBtn.addEventListener('click', () => {
-                alert('Создание новой коллекции в стиле Old Money');
-            });
-        }
-        
-        const importBtn = document.querySelector('[data-action="import"]');
-        if (importBtn) {
-            importBtn.addEventListener('click', () => {
-                alert('Импорт изображений в вашу коллекцию');
-            });
-        }
-        
-        const homeBtn = document.querySelector('[data-page="main"]');
-        if (homeBtn) {
-            homeBtn.addEventListener('click', async () => {
-                const container = document.getElementById('mainContainer');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="skeleton-element skeleton"></div>
-                        <div class="skeleton-element skeleton"></div>
-                        <div class="skeleton-element skeleton"></div>
-                    `;
-                }
-                await loadAllData();
-            });
-        }
-        
-        const headerLogo = document.getElementById('headerLogo');
-        if (headerLogo) {
-            headerLogo.addEventListener('click', async () => {
-                const container = document.getElementById('mainContainer');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="skeleton-element skeleton"></div>
-                        <div class="skeleton-element skeleton"></div>
-                        <div class="skeleton-element skeleton"></div>
-                    `;
-                }
-                await loadAllData();
-            });
-        }
+        function collapseMenu() { if (!mainElement.classList.contains('menu-collapsed')) { mainElement.classList.add('menu-collapsed'); localStorage.setItem('menuCollapsed', 'true'); } }
+        function expandMenu() { if (mainElement.classList.contains('menu-collapsed')) { mainElement.classList.remove('menu-collapsed'); localStorage.setItem('menuCollapsed', 'false'); } }
+        if (collapseMenuBtn) collapseMenuBtn.addEventListener('click', collapseMenu);
+        if (expandMenuBtn) expandMenuBtn.addEventListener('click', expandMenu);
+        if (localStorage.getItem('menuCollapsed') === 'true') mainElement.classList.add('menu-collapsed');
         
         function adjustTriggerHeight() {
             const trigger = document.getElementById('expandMenuBtn');
             const mainCont = document.querySelector('.mainContainer');
-            
             if (trigger && mainCont && window.innerWidth > 768) {
-                const mainHeight = mainCont.offsetHeight;
-                const targetHeight = Math.min(Math.max(mainHeight, 250), 700);
-                trigger.style.minHeight = targetHeight + 'px';
+                trigger.style.minHeight = Math.min(Math.max(mainCont.offsetHeight, 250), 700) + 'px';
             }
         }
         
-        window.addEventListener('load', () => {
-            adjustTriggerHeight();
-            setTimeout(adjustTriggerHeight, 100);
+        window.addEventListener('load', () => { 
+            loadItemsFromStorage();
+            renderItems();
+            loadUserInfo();
+            adjustTriggerHeight(); 
         });
         window.addEventListener('resize', adjustTriggerHeight);
+        const observer = new MutationObserver(adjustTriggerHeight);
+        if (document.getElementById('mainContainer')) observer.observe(document.getElementById('mainContainer'), { childList: true, subtree: true });
         
-        const observer = new MutationObserver(() => {
-            adjustTriggerHeight();
-        });
-        const mainContainer = document.getElementById('mainContainer');
-        if (mainContainer) {
-            observer.observe(mainContainer, { childList: true, subtree: true });
-        }
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !mainElement.classList.contains('menu-collapsed')) {
-                collapseMenu();
-            }
-        });
-        
-        loadAllData();
-        
-        console.log('Old Money стиль интегрирован: логотип с короной, зеленый градиент в header и боковой кнопке');
+        document.querySelector('[data-page="main"]')?.addEventListener('click', () => { renderItems(); });
+        document.getElementById('headerLogo')?.addEventListener('click', () => { renderItems(); });
+        document.getElementById('addItemBtn')?.addEventListener('click', () => openModal('addItemModal'));
     </script>
 </body>
 </html>

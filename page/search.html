@@ -9,726 +9,88 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: #F5F0E8;
-            font-family: 'Inter', sans-serif;
-            color: #2C2B28;
-        }
-
-        /* Цветовая палитра Old Money */
-        :root {
-            --old-green: #2C4A3E;
-            --old-gold: #B68B40;
-            --old-gold-light: #DAB066;
-            --old-cream: #FAF6F0;
-            --old-charcoal: #2E2B28;
-            --old-border: #E2D9CF;
-            --old-shadow: rgba(44, 42, 40, 0.08);
-            --old-card-bg: #FFFFFF;
-        }
-
-        /* Основной контент */
-        main {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 2fr 10fr;
-            gap: 20px;
-            padding: 20px;
-            background-color: #F5F0E8;
-            transition: grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* Состояние когда меню свернуто */
-        main.menu-collapsed {
-            grid-template-columns: auto 10fr;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
-            width: 100%;
-            height: 117px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            padding: 0 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(182, 139, 64, 0.3);
-        }
-        
-        /* Логотип в header */
-        .header-logo {
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .header-logo:hover {
-            transform: scale(1.02);
-        }
-        
-        .logo-icon {
-            font-size: 36px;
-            color: var(--old-gold);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-        
-        .logo-text {
-            font-size: 32px;
-            font-weight: 600;
-            font-family: 'Cormorant Garamond', serif;
-            color: #FAF6F0;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .logo-sub {
-            font-size: 12px;
-            font-family: 'Inter', sans-serif;
-            letter-spacing: 2px;
-            color: var(--old-gold-light);
-            margin-left: 4px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--old-charcoal);
-            width: 100%;
-            height: 48px;
-            flex-shrink: 0;
-            color: #DDD2C2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid var(--old-gold);
-            font-size: 13px;
-        }
-
-        /* Контейнер меню */
-        .burger-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            min-height: 100%;
-            width: 100%;
-        }
-        
-        /* Меню (бургер) */
-        .burger {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 10px;
-            width: 100%;
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        /* Кнопка-триггер для разворачивания */
-        .burger-trigger {
-            display: none;
-            width: 60px;
-            height: auto;
-            min-height: 300px;
-            background: linear-gradient(135deg, #2C4A3E, #3F6B58);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 4px 4px 12px rgba(0,0,0,0.15);
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 16px;
-            font-weight: 600;
-            color: #FAF6F0;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            border: 1px solid var(--old-gold);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: scale(0.95);
-            flex-shrink: 0;
-            font-family: 'Cormorant Garamond', serif;
-            letter-spacing: 2px;
-        }
-        
-        .burger-trigger::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(182, 139, 64, 0.2), rgba(218, 176, 102, 0.1));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .burger-trigger:hover::before {
-            opacity: 1;
-        }
-        
-        .burger-trigger:hover {
-            transform: scale(1.02);
-            background: linear-gradient(135deg, #3F6B58, #2C4A3E);
-            box-shadow: 6px 6px 16px rgba(0,0,0,0.2);
-            border-color: var(--old-gold-light);
-        }
-        
-        .burger-trigger span {
-            display: inline-block;
-            letter-spacing: 2px;
-            font-size: 15px;
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        
-        .burger-trigger .trigger-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-            writing-mode: horizontal-tb;
-            display: inline-block;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-        
-        /* Анимации для сворачивания/разворачивания */
-        .menu-collapsed .burger-container {
-            justify-content: flex-start;
-        }
-        
-        .menu-collapsed .burger-container .burger-trigger {
-            display: flex;
-            animation: triggerSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        
-        @keyframes triggerSlideIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.95) translateX(-10px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateX(0);
-            }
-        }
-        
-        .menu-collapsed .burger-container .burger {
-            animation: menuSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            display: none;
-        }
-        
-        @keyframes menuSlideOut {
-            0% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-        }
-        
-        .burger-container .burger {
-            animation: menuSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        @keyframes menuSlideIn {
-            0% {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .burger-container .burger-trigger {
-            animation: triggerSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        
-        @keyframes triggerSlideOut {
-            0% {
-                opacity: 1;
-                transform: scale(1) translateX(0);
-                display: flex;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0.95) translateX(-10px);
-                display: none;
-            }
-        }
-
-        .burger button {
-            cursor: pointer;
-            padding: 12px 20px;
-            border: 2px solid var(--old-green);
-            border-radius: 15px;
-            text-align: center;
-            background-color: #FAF6F0;
-            font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: flex-start;
-            color: #2C4A3E;
-            font-weight: 500;
-        }
-
-        .burger button i {
-            width: 24px;
-            font-size: 18px;
-            color: var(--old-green);
-        }
-
-        .burger button:hover {
-            transform: translateX(5px) scale(1.02);
-            color: var(--old-gold);
-            background-color: #FFFFFF;
-            border-color: var(--old-gold);
-            box-shadow: 4px 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .burger button:hover i {
-            color: var(--old-gold);
-        }
-        
-        .burger button:active {
-            transform: translateX(2px) scale(0.98);
-        }
-
-        /* Центральный контейнер */
-        .mainContainer {
-            background-color: #FFFFFF;
-            border: 1px solid var(--old-border);
-            border-radius: 20px;
-            padding: 24px;
-            overflow-y: auto;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            box-shadow: 0 4px 12px var(--old-shadow);
-        }
-        
-        /* Заголовок страницы */
-        .page-header {
-            margin-bottom: 8px;
-        }
-        
-        .page-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 32px;
-            font-weight: 600;
-            color: var(--old-green);
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .page-header h1 i {
-            color: var(--old-gold);
-        }
-        
-        /* Поисковая строка */
-        .search-section {
-            margin-bottom: 28px;
-        }
-        
-        .search-box-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .search-input-group {
-            flex: 1;
-            position: relative;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 48px;
-            border: 2px solid var(--old-border);
-            border-radius: 60px;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            background: var(--old-cream);
-            transition: all 0.3s;
-            color: #2C2B28;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--old-gold);
-            box-shadow: 0 0 0 3px rgba(182, 139, 64, 0.2);
-            background: white;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--old-gold);
-            font-size: 18px;
-        }
-        
-        .search-btn {
-            padding: 14px 32px;
-            background: var(--old-green);
-            color: white;
-            border: none;
-            border-radius: 60px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .search-btn:hover {
-            background: var(--old-gold);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        /* Фильтры */
-        .filters-section {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--old-border);
-        }
-        
-        .filter-chip {
-            padding: 8px 20px;
-            background: var(--old-cream);
-            border: 1px solid var(--old-border);
-            border-radius: 40px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #5C6E5A;
-        }
-        
-        .filter-chip:hover {
-            border-color: var(--old-gold);
-            color: var(--old-gold);
-        }
-        
-        .filter-chip.active {
-            background: var(--old-green);
-            border-color: var(--old-green);
-            color: white;
-        }
-        
-        /* Результаты */
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        
-        .results-count {
-            font-size: 14px;
-            color: var(--old-gold);
-            background: rgba(182, 139, 64, 0.1);
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-weight: 500;
-        }
-        
-        /* Сетка коллекций */
-        .collections-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        /* Карточка коллекции */
-        .collection-card {
-            border: 1px solid var(--old-border);
-            border-radius: 16px;
-            padding: 20px 24px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 20px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: #FAF6F0;
-        }
-        
-        .collection-card:hover {
-            background: linear-gradient(97deg, #FAF6F0 0%, #FFFFFF 100%);
-            transform: translateX(6px) scale(1.01);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-            border-color: var(--old-gold);
-        }
-        
-        .collection-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #2C4A3E, #3F6B58);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--old-gold);
-            font-size: 28px;
-        }
-        
-        .collection-info {
-            flex: 1;
-        }
-        
-        .collection-name {
-            font-weight: 600;
-            font-size: 20px;
-            color: var(--old-green);
-            font-family: 'Cormorant Garamond', serif;
-            margin-bottom: 8px;
-        }
-        
-        .collection-meta {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-            font-size: 14px;
-            color: #8F826C;
-        }
-        
-        .collection-meta span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .collection-meta i {
-            font-size: 12px;
-            color: var(--old-gold);
-        }
-        
-        .author-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(182, 139, 64, 0.1);
-            padding: 8px 16px;
-            border-radius: 40px;
-        }
-        
-        .author-avatar {
-            width: 32px;
-            height: 32px;
-            background: var(--old-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--old-gold);
-            font-size: 14px;
-        }
-        
-        .author-name {
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--old-green);
-        }
-        
-        /* Скелетон загрузки */
-        .skeleton {
-            background: linear-gradient(90deg, #F5F0E8 25%, #E8E2D8 50%, #F5F0E8 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 16px;
-        }
-        
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
-        }
-        
-        .skeleton-card {
-            height: 100px;
-        }
-        
-        /* Пустое состояние */
-        .empty-state {
-            text-align: center;
-            padding: 80px 40px;
-            color: #9B8E7C;
-        }
-        
-        .empty-state i {
-            font-size: 80px;
-            margin-bottom: 24px;
-            opacity: 0.5;
-            color: var(--old-gold);
-        }
-        
-        .empty-state p {
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
-        
-        .empty-state .empty-sub {
-            font-size: 14px;
-            opacity: 0.7;
-        }
-        
-        /* Адаптивность */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
+        :root { --old-green: #2C4A3E; --old-gold: #B68B40; --old-gold-light: #DAB066; --old-cream: #FAF6F0; --old-charcoal: #2E2B28; --old-border: #E2D9CF; --old-shadow: rgba(44,42,40,0.08); --old-card-bg: #FFFFFF; }
+        main { flex: 1; display: grid; grid-template-columns: 2fr 10fr; gap: 20px; padding: 20px; background-color: #F5F0E8; transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
+        main.menu-collapsed { grid-template-columns: auto 10fr; }
+        header { background: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
+        .header-logo { display: flex; align-items: baseline; gap: 8px; cursor: pointer; transition: transform 0.3s ease; }
+        .header-logo:hover { transform: scale(1.02); }
+        .logo-icon { font-size: 36px; color: var(--old-gold); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .logo-text { font-size: 32px; font-weight: 600; font-family: 'Cormorant Garamond', serif; color: #FAF6F0; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .logo-sub { font-size: 12px; font-family: 'Inter', sans-serif; letter-spacing: 2px; color: var(--old-gold-light); margin-left: 4px; }
+        footer { background-color: var(--old-charcoal); width: 100%; height: 48px; flex-shrink: 0; color: #DDD2C2; display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--old-gold); font-size: 13px; }
+        .burger-container { position: relative; display: flex; align-items: center; min-height: 100%; width: 100%; }
+        .burger { display: flex; flex-direction: column; gap: 15px; padding: 10px; width: 100%; transition: opacity 0.4s cubic-bezier(0.2,0.9,0.4,1.1), transform 0.4s cubic-bezier(0.2,0.9,0.4,1.1); opacity: 1; transform: translateX(0); }
+        .burger-trigger { display: none; width: 60px; height: auto; min-height: 300px; background: linear-gradient(135deg,#2C4A3E,#3F6B58); border-radius: 15px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1.1); box-shadow: 4px 4px 12px rgba(0,0,0,0.15); writing-mode: vertical-rl; text-orientation: mixed; font-size: 16px; font-weight: 600; color: #FAF6F0; align-items: center; justify-content: center; gap: 12px; border: 1px solid var(--old-gold); position: relative; overflow: hidden; opacity: 0; transform: scale(0.95); flex-shrink: 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; }
+        .burger-trigger:hover { transform: scale(1.02); background: linear-gradient(135deg,#3F6B58,#2C4A3E); border-color: var(--old-gold-light); }
+        .burger-trigger .trigger-icon { font-size: 32px; writing-mode: horizontal-tb; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .menu-collapsed .burger-container .burger-trigger { display: flex; animation: triggerSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
+        @keyframes triggerSlideIn { 0% { opacity: 0; transform: scale(0.95) translateX(-10px); } 100% { opacity: 1; transform: scale(1) translateX(0); } }
+        .menu-collapsed .burger-container .burger { animation: menuSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; display: none; }
+        @keyframes menuSlideOut { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-20px); } }
+        .burger-container .burger { animation: menuSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1); }
+        @keyframes menuSlideIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
+        .burger-container .burger-trigger { animation: triggerSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
+        @keyframes triggerSlideOut { 0% { opacity: 1; transform: scale(1) translateX(0); display: flex; } 100% { opacity: 0; transform: scale(0.95) translateX(-10px); display: none; } }
+        .burger button { cursor: pointer; padding: 12px 20px; border: 2px solid var(--old-green); border-radius: 15px; text-align: center; background-color: #FAF6F0; font-size: 18px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); font-family: 'Inter', sans-serif; box-shadow: 2px 2px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; width: 100%; justify-content: flex-start; color: #2C4A3E; font-weight: 500; }
+        .burger button:hover { transform: translateX(5px) scale(1.02); color: var(--old-gold); background-color: #FFFFFF; border-color: var(--old-gold); }
+        .mainContainer { background-color: #FFFFFF; border: 1px solid var(--old-border); border-radius: 20px; padding: 24px; overflow-y: auto; min-height: 200px; display: flex; flex-direction: column; gap: 20px; width: 100%; box-shadow: 0 4px 12px var(--old-shadow); }
+        .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--old-green); letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .search-section { margin-bottom: 28px; }
+        .search-box-wrapper { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .search-input-group { flex: 1; position: relative; }
+        .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid var(--old-border); border-radius: 60px; font-size: 16px; font-family: 'Inter', sans-serif; background: var(--old-cream); transition: all 0.3s; color: #2C2B28; }
+        .search-input:focus { outline: none; border-color: var(--old-gold); box-shadow: 0 0 0 3px rgba(182,139,64,0.2); background: white; }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--old-gold); font-size: 18px; }
+        .search-btn { padding: 14px 32px; background: var(--old-green); color: white; border: none; border-radius: 60px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; }
+        .search-btn:hover { background: var(--old-gold); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .results-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        .results-count { font-size: 14px; color: var(--old-gold); background: rgba(182,139,64,0.1); padding: 6px 14px; border-radius: 40px; font-weight: 500; }
+        .collections-grid { display: flex; flex-direction: column; gap: 16px; }
+        .collection-card { border: 1px solid var(--old-border); border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); background-color: #FAF6F0; }
+        .collection-card:hover { background: linear-gradient(97deg,#FAF6F0 0%,#FFFFFF 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: var(--old-gold); }
+        .collection-icon { width: 60px; height: 60px; background: linear-gradient(135deg,#2C4A3E,#3F6B58); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--old-gold); font-size: 28px; }
+        .collection-info { flex: 1; }
+        .collection-name { font-weight: 600; font-size: 20px; color: var(--old-green); font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; }
+        .collection-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #8F826C; }
+        .author-info { display: flex; align-items: center; gap: 8px; background: rgba(182,139,64,0.1); padding: 8px 16px; border-radius: 40px; }
+        .author-avatar { width: 32px; height: 32px; background: var(--old-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--old-gold); font-size: 14px; }
+        .author-name { font-weight: 500; font-size: 14px; color: var(--old-green); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,42,40,0.85); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: #FFFFFF; border-radius: 24px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; animation: modalSlide 0.3s ease; border: 1px solid var(--old-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--old-green); }
+        .modal-close { background: none; border: none; font-size: 1.8rem; color: #9B8E7C; cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: var(--old-gold); }
+        .items-table { width: 100%; border-collapse: collapse; }
+        .items-table th, .items-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--old-border); }
+        .items-table th { font-weight: 600; color: var(--old-green); background: var(--old-cream); }
+        .add-to-wishlist-btn { background: var(--old-gold); color: white; border: none; border-radius: 40px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .add-to-wishlist-btn:hover { background: var(--old-green); transform: scale(1.02); }
+        .empty-state { text-align: center; padding: 60px 40px; color: #9B8E7C; }
+        .skeleton { background: linear-gradient(90deg,#F5F0E8 25%,#E8E2D8 50%,#F5F0E8 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 16px; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-card { height: 100px; }
         @media (max-width: 768px) {
-            main {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            main.menu-collapsed {
-                grid-template-columns: 1fr;
-            }
-            
-            header {
-                padding: 0 20px;
-                height: 90px;
-            }
-            
-            .logo-text {
-                font-size: 24px;
-            }
-            
-            .logo-icon {
-                font-size: 28px;
-            }
-            
-            .burger-container {
-                order: 1;
-                min-height: auto;
-                width: 100%;
-            }
-            
-            .burger {
-                order: 1;
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-                width: 100%;
-            }
-            
-            .burger button {
-                width: auto;
-                min-width: 120px;
-                justify-content: center;
-                font-size: 14px;
-                padding: 10px 16px;
-            }
-            
-            .burger-trigger {
-                width: 100%;
-                height: 70px !important;
-                writing-mode: horizontal-tb;
-                flex-direction: row;
-                min-height: auto;
-            }
-            
-            .burger-trigger .trigger-icon {
-                writing-mode: horizontal-tb;
-                margin-bottom: 0;
-                margin-right: 12px;
-            }
-            
-            .menu-collapsed .burger-container .burger-trigger {
-                display: flex;
-                width: 100%;
-            }
-            
-            .mainContainer {
-                order: 2;
-            }
-            
-            .collection-card {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 16px;
-            }
-            
-            .collection-icon {
-                margin: 0 auto;
-            }
-            
-            .author-info {
-                justify-content: center;
-            }
-            
-            .collection-meta {
-                justify-content: center;
-            }
-            
-            .search-box-wrapper {
-                flex-direction: column;
-            }
-            
-            .search-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .collection-meta {
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-            }
+            main { grid-template-columns: 1fr; gap: 15px; }
+            main.menu-collapsed { grid-template-columns: 1fr; }
+            .burger { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .burger button { width: auto; min-width: 120px; justify-content: center; }
+            .collection-card { grid-template-columns: 1fr; text-align: center; gap: 16px; }
+            .collection-icon { margin: 0 auto; }
+            .author-info { justify-content: center; }
+            .search-box-wrapper { flex-direction: column; }
+            .search-btn { width: 100%; justify-content: center; }
+            .items-table th, .items-table td { padding: 8px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
-    
     <header>
         <div class="header-logo" onclick="window.location.href='main.html';">
             <i class="fas fa-crown logo-icon"></i>
@@ -738,7 +100,6 @@
     </header>
 
     <main>
-        <!-- Левая колонка: контейнер с меню и триггером -->
         <div class="burger-container">
             <div class="burger">
                 <button type="button" onclick="window.location.href='main.html';"><i class="fas fa-home"></i> Главная</button>
@@ -748,7 +109,6 @@
                 <button type="button" id="importBtn"><i class="fas fa-upload"></i> Импорт</button>
                 <button type="button" id="collapseMenuBtn"><i class="fas fa-compress-alt"></i> Свернуть</button>
             </div>
-            
             <div class="burger-trigger" id="expandMenuBtn">
                 <span class="trigger-icon">☰</span>
                 <span>МЕНЮ</span>
@@ -757,273 +117,263 @@
 
         <div class="mainContainer" id="mainContainer">
             <div class="page-header">
-                <h1>
-                    <i class="fas fa-search"></i>
-                    Поиск коллекций
-                </h1>
+                <h1><i class="fas fa-search"></i> Поиск коллекций</h1>
             </div>
-            
             <div class="search-section">
                 <div class="search-box-wrapper">
                     <div class="search-input-group">
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" class="search-input" id="searchInput" placeholder="Поиск по названию коллекции, автору или тегам...">
                     </div>
-                    <button class="search-btn" id="searchBtn">
-                        <i class="fas fa-search"></i> Найти
-                    </button>
+                    <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> Найти</button>
                 </div>
             </div>
-            
-            <div class="filters-section" id="filtersSection">
-                <div class="filter-chip active" data-filter="all">Все коллекции</div>
-                <div class="filter-chip" data-filter="popular">Популярные</div>
-                <div class="filter-chip" data-filter="recent">Недавние</div>
-                <div class="filter-chip" data-filter="art">Искусство</div>
-                <div class="filter-chip" data-filter="photo">Фотография</div>
-            </div>
-            
             <div class="results-header">
                 <div class="results-count" id="resultsCount">0 коллекций</div>
-                <div style="font-size: 13px; color: #8F826C;">
-                    <i class="fas fa-users"></i> Коллекции других пользователей
-                </div>
+                <div style="font-size: 13px; color: #8F826C;"><i class="fas fa-users"></i> Коллекции других пользователей</div>
             </div>
-            
             <div id="collectionsContent">
-                <!-- Скелетон загрузки -->
                 <div class="skeleton skeleton-card" style="height: 100px; margin-bottom: 16px;"></div>
                 <div class="skeleton skeleton-card" style="height: 100px; margin-bottom: 16px;"></div>
                 <div class="skeleton skeleton-card" style="height: 100px;"></div>
             </div>
         </div>
-    </main> 
+    </main>
 
     <footer>
         <span>© 2025 OLD MONEY — Открытые коллекции со всего мира</span>
     </footer>
 
+    <!-- Модальное окно для просмотра предметов пользователя -->
+    <div class="modal" id="userItemsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Предметы коллекции</h3>
+                <button class="modal-close" onclick="closeModal('userItemsModal')">&times;</button>
+            </div>
+            <div id="modalItemsList">
+                <!-- Сюда будет вставлена таблица предметов -->
+            </div>
+        </div>
+    </div>
+
     <script>
-        // ==================== Данные коллекций других пользователей ====================
         let allCollections = [];
         let filteredCollections = [];
-        let currentFilter = 'all';
         let currentSearchQuery = '';
-        
-        // Заглушка данных коллекций других пользователей (эмуляция backend)
+
+        const userItemsMap = {
+            1: [
+                { id: 101, name: "Фотография 'Золотая аллея'", category: "Фотография", price: 3500, acquisitionDate: "2024-09-10" },
+                { id: 102, name: "Этюд 'Осенний парк'", category: "Живопись", price: 12000, acquisitionDate: "2024-08-15" },
+                { id: 103, name: "Старинная открытка", category: "Графика", price: 800, acquisitionDate: "2024-10-01" }
+            ],
+            2: [
+                { id: 201, name: "Карманные часы Omega", category: "Часы", price: 45000, acquisitionDate: "2024-05-20" },
+                { id: 202, name: "Наручные часы Longines", category: "Часы", price: 78000, acquisitionDate: "2024-07-12" },
+                { id: 203, name: "Секундомер", category: "Аксессуары", price: 12500, acquisitionDate: "2024-03-04" }
+            ],
+            3: [
+                { id: 301, name: "Фото 'Невский проспект'", category: "Фотография", price: 5600, acquisitionDate: "2025-01-18" },
+                { id: 302, name: "Снимок 'Эрмитаж'", category: "Фотография", price: 4200, acquisitionDate: "2025-02-10" },
+                { id: 303, name: "Серия 'Петербургские дворики'", category: "Фотография", price: 8900, acquisitionDate: "2025-02-28" }
+            ],
+            4: [
+                { id: 401, name: "Картина 'Абстракция'", category: "Живопись", price: 25000, acquisitionDate: "2024-12-01" },
+                { id: 402, name: "Скульптура 'Сфера'", category: "Скульптура", price: 18000, acquisitionDate: "2024-11-15" },
+                { id: 403, name: "Инсталляция", category: "Арт-объект", price: 32000, acquisitionDate: "2024-10-20" }
+            ],
+            5: [
+                { id: 501, name: "Модель Cadillac 1959", category: "Модели", price: 5500, acquisitionDate: "2024-09-05" },
+                { id: 502, name: "Фото 'Ford Mustang'", category: "Фотография", price: 2300, acquisitionDate: "2024-08-22" },
+                { id: 503, name: "Каталог автомобилей", category: "Книги", price: 1500, acquisitionDate: "2024-07-30" }
+            ],
+            6: [
+                { id: 601, name: "Фото 'Лебединое озеро'", category: "Фотография", price: 6700, acquisitionDate: "2025-02-14" },
+                { id: 602, name: "Афиша балета", category: "Графика", price: 1200, acquisitionDate: "2025-01-20" },
+                { id: 603, name: "Костюм балерины (мини)", category: "Аксессуары", price: 8900, acquisitionDate: "2024-12-05" }
+            ],
+            7: [
+                { id: 701, name: "Чертеж 'Колоннада'", category: "Архитектура", price: 3400, acquisitionDate: "2024-11-10" },
+                { id: 702, name: "Эскиз 'Фасад'", category: "Графика", price: 2800, acquisitionDate: "2024-10-18" },
+                { id: 703, name: "Альбом с чертежами", category: "Книги", price: 4500, acquisitionDate: "2024-09-25" }
+            ],
+            8: [
+                { id: 801, name: "Фото 'Суздаль'", category: "Фотография", price: 3200, acquisitionDate: "2025-02-01" },
+                { id: 802, name: "Сувенир 'Золотое кольцо'", category: "Сувениры", price: 900, acquisitionDate: "2025-01-15" },
+                { id: 803, name: "Карта маршрута", category: "Картография", price: 500, acquisitionDate: "2024-12-28" }
+            ],
+            9: [
+                { id: 901, name: "Статуэтка 'Балерина'", category: "Фарфор", price: 12500, acquisitionDate: "2024-08-10" },
+                { id: 902, name: "Ваза", category: "Фарфор", price: 8900, acquisitionDate: "2024-07-05" },
+                { id: 903, name: "Тарелка декоративная", category: "Фарфор", price: 3200, acquisitionDate: "2024-06-20" }
+            ],
+            10: [
+                { id: 1001, name: "Фото 'Долина гейзеров'", category: "Фотография", price: 4800, acquisitionDate: "2025-02-22" },
+                { id: 1002, name: "Сувенир 'Вулкан'", category: "Сувениры", price: 1200, acquisitionDate: "2025-02-10" },
+                { id: 1003, name: "Альбом 'Камчатка'", category: "Книги", price: 2500, acquisitionDate: "2025-01-30" }
+            ]
+        };
+
         async function fetchPublicCollections() {
             await new Promise(resolve => setTimeout(resolve, 800));
-            
             return [
-                { 
-                    id: 1, 
-                    name: "Золотая осень в усадьбах", 
-                    itemCount: 47, 
-                    author: "Екатерина Волконская",
-                    authorInitials: "ЕВ",
-                    category: "photo",
-                    popularity: 156,
-                    date: "2025-02-15",
-                    tags: ["пейзаж", "осень", "усадьбы"]
-                },
-                { 
-                    id: 2, 
-                    name: "Антикварные часы XIX века", 
-                    itemCount: 23, 
-                    author: "Дмитрий Строганов",
-                    authorInitials: "ДС",
-                    category: "art",
-                    popularity: 89,
-                    date: "2025-01-20",
-                    tags: ["часы", "антиквариат", "история"]
-                },
-                { 
-                    id: 3, 
-                    name: "Уличная фотография: Петербург", 
-                    itemCount: 112, 
-                    author: "Анна Михайлова",
-                    authorInitials: "АМ",
-                    category: "photo",
-                    popularity: 234,
-                    date: "2025-02-28",
-                    tags: ["улица", "город", "архитектура"]
-                },
-                { 
-                    id: 4, 
-                    name: "Современная живопись: новые имена", 
-                    itemCount: 56, 
-                    author: "Константин Орлов",
-                    authorInitials: "КО",
-                    category: "art",
-                    popularity: 178,
-                    date: "2025-02-10",
-                    tags: ["живопись", "современное искусство"]
-                },
-                { 
-                    id: 5, 
-                    name: "Винтажные автомобили 1950-60х", 
-                    itemCount: 34, 
-                    author: "Павел Шереметьев",
-                    authorInitials: "ПШ",
-                    category: "popular",
-                    popularity: 312,
-                    date: "2025-01-05",
-                    tags: ["автомобили", "винтаж", "ретро"]
-                },
-                { 
-                    id: 6, 
-                    name: "Балет в объективе", 
-                    itemCount: 78, 
-                    author: "Мария Кшесинская",
-                    authorInitials: "МК",
-                    category: "photo",
-                    popularity: 267,
-                    date: "2025-02-25",
-                    tags: ["балет", "театр", "искусство"]
-                },
-                { 
-                    id: 7, 
-                    name: "Архитектурные эскизы классицизма", 
-                    itemCount: 41, 
-                    author: "Алексей Воронихин",
-                    authorInitials: "АВ",
-                    category: "art",
-                    popularity: 145,
-                    date: "2025-01-30",
-                    tags: ["архитектура", "чертежи", "классицизм"]
-                },
-                { 
-                    id: 8, 
-                    name: "Путешествие по Золотому кольцу", 
-                    itemCount: 95, 
-                    author: "Татьяна Ларина",
-                    authorInitials: "ТЛ",
-                    category: "popular",
-                    popularity: 198,
-                    date: "2025-02-18",
-                    tags: ["путешествия", "россия", "монастыри"]
-                },
-                { 
-                    id: 9, 
-                    name: "Фарфоровые статуэтки", 
-                    itemCount: 29, 
-                    author: "Сергей Кузнецов",
-                    authorInitials: "СК",
-                    category: "art",
-                    popularity: 67,
-                    date: "2025-01-12",
-                    tags: ["фарфор", "коллекционирование"]
-                },
-                { 
-                    id: 10, 
-                    name: "Природа Камчатки", 
-                    itemCount: 203, 
-                    author: "Игорь Петров",
-                    authorInitials: "ИП",
-                    category: "photo",
-                    popularity: 421,
-                    date: "2025-02-22",
-                    tags: ["природа", "пейзаж", "вулканы"]
-                }
+                { id: 1, name: "Золотая осень в усадьбах", itemCount: 47, author: "Екатерина Волконская", authorInitials: "ЕВ", category: "photo", popularity: 156, date: "2025-02-15", tags: ["пейзаж", "осень", "усадьбы"] },
+                { id: 2, name: "Антикварные часы XIX века", itemCount: 23, author: "Дмитрий Строганов", authorInitials: "ДС", category: "art", popularity: 89, date: "2025-01-20", tags: ["часы", "антиквариат", "история"] },
+                { id: 3, name: "Уличная фотография: Петербург", itemCount: 112, author: "Анна Михайлова", authorInitials: "АМ", category: "photo", popularity: 234, date: "2025-02-28", tags: ["улица", "город", "архитектура"] },
+                { id: 4, name: "Современная живопись: новые имена", itemCount: 56, author: "Константин Орлов", authorInitials: "КО", category: "art", popularity: 178, date: "2025-02-10", tags: ["живопись", "современное искусство"] },
+                { id: 5, name: "Винтажные автомобили 1950-60х", itemCount: 34, author: "Павел Шереметьев", authorInitials: "ПШ", category: "popular", popularity: 312, date: "2025-01-05", tags: ["автомобили", "винтаж", "ретро"] },
+                { id: 6, name: "Балет в объективе", itemCount: 78, author: "Мария Кшесинская", authorInitials: "МК", category: "photo", popularity: 267, date: "2025-02-25", tags: ["балет", "театр", "искусство"] },
+                { id: 7, name: "Архитектурные эскизы классицизма", itemCount: 41, author: "Алексей Воронихин", authorInitials: "АВ", category: "art", popularity: 145, date: "2025-01-30", tags: ["архитектура", "чертежи", "классицизм"] },
+                { id: 8, name: "Путешествие по Золотому кольцу", itemCount: 95, author: "Татьяна Ларина", authorInitials: "ТЛ", category: "popular", popularity: 198, date: "2025-02-18", tags: ["путешествия", "россия", "монастыри"] },
+                { id: 9, name: "Фарфоровые статуэтки", itemCount: 29, author: "Сергей Кузнецов", authorInitials: "СК", category: "art", popularity: 67, date: "2025-01-12", tags: ["фарфор", "коллекционирование"] },
+                { id: 10, name: "Природа Камчатки", itemCount: 203, author: "Игорь Петров", authorInitials: "ИП", category: "photo", popularity: 421, date: "2025-02-22", tags: ["природа", "пейзаж", "вулканы"] }
             ];
         }
-        
-        // Функция фильтрации и поиска
+
         function filterCollections() {
             let result = [...allCollections];
-            
-            // Поиск по названию, автору и тегам
             if (currentSearchQuery.trim()) {
                 const query = currentSearchQuery.toLowerCase().trim();
-                result = result.filter(collection => 
-                    collection.name.toLowerCase().includes(query) ||
-                    collection.author.toLowerCase().includes(query) ||
-                    collection.tags.some(tag => tag.toLowerCase().includes(query))
+                result = result.filter(c => 
+                    c.name.toLowerCase().includes(query) ||
+                    c.author.toLowerCase().includes(query) ||
+                    c.tags.some(tag => tag.toLowerCase().includes(query))
                 );
             }
-            
-            // Фильтр по категории
-            if (currentFilter !== 'all') {
-                if (currentFilter === 'popular') {
-                    result.sort((a, b) => b.popularity - a.popularity);
-                    result = result.slice(0, 6);
-                } else if (currentFilter === 'recent') {
-                    result.sort((a, b) => new Date(b.date) - new Date(a.date));
-                    result = result.slice(0, 6);
-                } else {
-                    result = result.filter(c => c.category === currentFilter);
-                }
-            }
-            
             filteredCollections = result;
             renderCollections(result);
         }
-        
-        // Форматирование даты
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('ru-RU');
         }
-        
-        // Отображение коллекций
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ru-RU').format(price) + " ₽";
+        }
+
         function renderCollections(collections) {
             const container = document.getElementById('collectionsContent');
             const countSpan = document.getElementById('resultsCount');
-            
             if (!container) return;
-            
             if (!collections || collections.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-folder-open"></i>
-                        <p>Ничего не найдено</p>
-                        <p class="empty-sub">Попробуйте изменить параметры поиска или фильтры</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>Ничего не найдено</p><p class="empty-sub">Попробуйте изменить параметры поиска</p></div>`;
                 if (countSpan) countSpan.textContent = '0 коллекций';
                 return;
             }
-            
-            container.innerHTML = `
-                <div class="collections-grid">
-                    ${collections.map(collection => `
-                        <div class="collection-card" data-id="${collection.id}">
-                            <div class="collection-icon">
-                                <i class="fas ${collection.category === 'photo' ? 'fa-camera' : collection.category === 'art' ? 'fa-palette' : 'fa-star'}"></i>
-                            </div>
-                            <div class="collection-info">
-                                <div class="collection-name">${escapeHtml(collection.name)}</div>
-                                <div class="collection-meta">
-                                    <span><i class="fas fa-image"></i> ${collection.itemCount} предметов</span>
-                                    <span><i class="fas fa-calendar"></i> ${formatDate(collection.date)}</span>
-                                    <span><i class="fas fa-heart"></i> ${collection.popularity}</span>
-                                    <span><i class="fas fa-tag"></i> ${collection.tags.slice(0, 2).map(t => escapeHtml(t)).join(', ')}</span>
-                                </div>
-                            </div>
-                            <div class="author-info">
-                                <div class="author-avatar">${escapeHtml(collection.authorInitials)}</div>
-                                <div class="author-name">${escapeHtml(collection.author)}</div>
-                            </div>
+            container.innerHTML = `<div class="collections-grid">${collections.map(c => `
+                <div class="collection-card" data-id="${c.id}">
+                    <div class="collection-icon"><i class="fas ${c.category === 'photo' ? 'fa-camera' : c.category === 'art' ? 'fa-palette' : 'fa-star'}"></i></div>
+                    <div class="collection-info">
+                        <div class="collection-name">${escapeHtml(c.name)}</div>
+                        <div class="collection-meta">
+                            <span><i class="fas fa-image"></i> ${c.itemCount} предметов</span>
+                            <span><i class="fas fa-calendar"></i> ${formatDate(c.date)}</span>
+                            <span><i class="fas fa-heart"></i> ${c.popularity}</span>
+                            <span><i class="fas fa-tag"></i> ${c.tags.slice(0,2).map(t=>escapeHtml(t)).join(', ')}</span>
                         </div>
-                    `).join('')}
+                    </div>
+                    <div class="author-info">
+                        <div class="author-avatar">${escapeHtml(c.authorInitials)}</div>
+                        <div class="author-name">${escapeHtml(c.author)}</div>
+                    </div>
                 </div>
-            `;
+            `).join('')}</div>`;
+            if (countSpan) countSpan.textContent = `${collections.length} ${getDeclension(collections.length, 'коллекция', 'коллекции', 'коллекций')}`;
             
-            const count = collections.length;
-            countSpan.textContent = `${count} ${getDeclension(count, 'коллекция', 'коллекции', 'коллекций')}`;
-            
-            // Добавляем обработчики клика на карточки
             document.querySelectorAll('.collection-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const id = parseInt(card.dataset.id);
-                    const collection = collections.find(c => c.id === id);
+                    const collection = allCollections.find(c => c.id === id);
                     if (collection) {
-                        alert(`📁 ${collection.name}\n👤 Автор: ${collection.author}\n🖼️ Количество: ${collection.itemCount}\n📅 Создана: ${formatDate(collection.date)}\n\nДетальный просмотр коллекции будет доступен в ближайшее время.`);
+                        openUserItemsModal(collection);
                     }
                 });
             });
         }
-        
+
+        function openUserItemsModal(collection) {
+            const modal = document.getElementById('userItemsModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalList = document.getElementById('modalItemsList');
+            modalTitle.textContent = `Предметы: ${collection.name}`;
+            const items = userItemsMap[collection.id] || [];
+            if (items.length === 0) {
+                modalList.innerHTML = '<div class="empty-state"><p>У этого пользователя пока нет предметов в коллекции.</p></div>';
+            } else {
+                modalList.innerHTML = `
+                    <table class="items-table">
+                        <thead><tr><th>Название</th><th>Категория</th><th>Стоимость</th><th>Дата</th><th></th></tr></thead>
+                        <tbody>
+                            ${items.map(item => `
+                                <tr>
+                                    <td>${escapeHtml(item.name)}</td>
+                                    <td>${escapeHtml(item.category)}</td>
+                                    <td>${formatPrice(item.price)}</td>
+                                    <td>${formatDate(item.acquisitionDate)}</td>
+                                    <td><button class="add-to-wishlist-btn" data-item='${JSON.stringify(item)}'><i class="fas fa-heart"></i> В желаемое</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.querySelectorAll('.add-to-wishlist-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const itemData = JSON.parse(btn.dataset.item);
+                        addToWishlist(itemData);
+                    });
+                });
+            }
+            modal.classList.add('active');
+        }
+
+        function addToWishlist(item) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
+            if (!wishlist.some(w => w.id === item.id)) {
+                // Сохраняем в том же формате, как в main.html
+                const newItem = {
+                    id: item.id,
+                    name: item.name,
+                    category: item.category,
+                    price: item.price,
+                    acquisitionDate: item.acquisitionDate,
+                    collection: "Из поиска"
+                };
+                wishlist.push(newItem);
+                localStorage.setItem('wishlistItems', JSON.stringify(wishlist));
+                showNotification('Добавлено в желаемое');
+            } else {
+                showNotification('Уже в желаемом', '#D1664A');
+            }
+        }
+
+        function showNotification(message, bgColor = '#2C4A3E') {
+            const notif = document.createElement('div');
+            notif.textContent = message;
+            notif.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 40px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            `;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notif.remove(), 300);
+            }, 2000);
+        }
+
         function getDeclension(n, one, two, five) {
             n = Math.abs(n) % 100;
             if (n >= 5 && n <= 20) return five;
@@ -1032,142 +382,66 @@
             if (n >= 2 && n <= 4) return two;
             return five;
         }
-        
+
         function escapeHtml(str) {
             if (!str) return '';
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
         }
-        
-        // Загрузка данных
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        window.closeModal = closeModal;
+
         async function loadCollections() {
             try {
                 const container = document.getElementById('collectionsContent');
                 if (container) {
-                    container.innerHTML = `
-                        <div class="skeleton skeleton-card" style="height: 100px; margin-bottom: 16px;"></div>
-                        <div class="skeleton skeleton-card" style="height: 100px; margin-bottom: 16px;"></div>
-                        <div class="skeleton skeleton-card" style="height: 100px;"></div>
-                    `;
+                    container.innerHTML = `<div class="skeleton skeleton-card" style="height:100px; margin-bottom:16px;"></div><div class="skeleton skeleton-card" style="height:100px; margin-bottom:16px;"></div><div class="skeleton skeleton-card" style="height:100px;"></div>`;
                 }
-                
                 allCollections = await fetchPublicCollections();
                 filterCollections();
             } catch (error) {
-                console.error('Ошибка загрузки коллекций:', error);
-                const container = document.getElementById('collectionsContent');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>Ошибка загрузки данных</p>
-                            <button class="search-btn" onclick="location.reload()" style="margin-top: 20px;">Обновить</button>
-                        </div>
-                    `;
-                }
+                console.error(error);
+                document.getElementById('collectionsContent').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки</p><button class="search-btn" onclick="location.reload()">Обновить</button></div>`;
             }
         }
-        
-        // ==================== Функционал поиска и фильтров ====================
+
         function performSearch() {
             const searchInput = document.getElementById('searchInput');
             currentSearchQuery = searchInput?.value || '';
             filterCollections();
         }
-        
-        // ==================== Функционал сворачивания меню ====================
+
         const mainElement = document.querySelector('main');
         const collapseMenuBtn = document.getElementById('collapseMenuBtn');
         const expandMenuBtn = document.getElementById('expandMenuBtn');
-        
-        function collapseMenu() {
-            if (!mainElement.classList.contains('menu-collapsed')) {
-                mainElement.classList.add('menu-collapsed');
-                localStorage.setItem('menuCollapsedSearch', 'true');
-                setTimeout(adjustTriggerHeight, 400);
-            }
-        }
-        
-        function expandMenu() {
-            if (mainElement.classList.contains('menu-collapsed')) {
-                mainElement.classList.remove('menu-collapsed');
-                localStorage.setItem('menuCollapsedSearch', 'false');
-                setTimeout(adjustTriggerHeight, 400);
-            }
-        }
-        
-        if (collapseMenuBtn) {
-            collapseMenuBtn.addEventListener('click', collapseMenu);
-        }
-        
-        if (expandMenuBtn) {
-            expandMenuBtn.addEventListener('click', expandMenu);
-        }
-        
-        const savedState = localStorage.getItem('menuCollapsedSearch');
-        if (savedState === 'true') {
-            mainElement.classList.add('menu-collapsed');
-        }
-        
+        function collapseMenu() { if (!mainElement.classList.contains('menu-collapsed')) { mainElement.classList.add('menu-collapsed'); localStorage.setItem('menuCollapsedSearch', 'true'); } }
+        function expandMenu() { if (mainElement.classList.contains('menu-collapsed')) { mainElement.classList.remove('menu-collapsed'); localStorage.setItem('menuCollapsedSearch', 'false'); } }
+        if (collapseMenuBtn) collapseMenuBtn.addEventListener('click', collapseMenu);
+        if (expandMenuBtn) expandMenuBtn.addEventListener('click', expandMenu);
+        if (localStorage.getItem('menuCollapsedSearch') === 'true') mainElement.classList.add('menu-collapsed');
+
         function adjustTriggerHeight() {
             const trigger = document.getElementById('expandMenuBtn');
             const mainCont = document.querySelector('.mainContainer');
-            
             if (trigger && mainCont && window.innerWidth > 768) {
-                const mainHeight = mainCont.offsetHeight;
-                const targetHeight = Math.min(Math.max(mainHeight, 250), 700);
-                trigger.style.minHeight = targetHeight + 'px';
+                trigger.style.minHeight = Math.min(Math.max(mainCont.offsetHeight, 250), 700) + 'px';
             }
         }
-        
+
         window.addEventListener('load', () => {
+            loadCollections();
             adjustTriggerHeight();
-            setTimeout(adjustTriggerHeight, 100);
         });
         window.addEventListener('resize', adjustTriggerHeight);
-        
-        // Обработчики кнопок
-        const searchBtn = document.getElementById('searchBtn');
-        if (searchBtn) {
-            searchBtn.addEventListener('click', performSearch);
-        }
-        
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') performSearch();
-            });
-        }
-        
-        // Обработчики фильтров
-        document.querySelectorAll('.filter-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                currentFilter = chip.dataset.filter;
-                filterCollections();
-            });
-        });
-        
-        const createCollectionBtn = document.getElementById('createCollectionBtn');
-        if (createCollectionBtn) {
-            createCollectionBtn.addEventListener('click', () => {
-                alert('✨ Создание новой коллекции\nДелитесь своими произведениями с сообществом Old Money');
-            });
-        }
-        
-        const importBtn = document.getElementById('importBtn');
-        if (importBtn) {
-            importBtn.addEventListener('click', () => {
-                alert('📤 Импорт изображений\nДобавьте новые работы в свою коллекцию');
-            });
-        }
-        
-        // Загружаем данные
-        loadCollections();
-        
-        console.log('Страница "Поиск" в стиле Old Money загружена');
+
+        document.getElementById('searchBtn')?.addEventListener('click', performSearch);
+        document.getElementById('searchInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+        document.getElementById('createCollectionBtn')?.addEventListener('click', () => alert('✨ Создание новой коллекции\nДелитесь своими произведениями с сообществом Old Money'));
+        document.getElementById('importBtn')?.addEventListener('click', () => alert('📤 Импорт изображений\nДобавьте новые работы в свою коллекцию'));
     </script>
 </body>
 </html>
