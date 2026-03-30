@@ -9,628 +9,91 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: #F5F0E8;
-            font-family: 'Inter', sans-serif;
-            color: #2C2B28;
-        }
-
-        :root {
-            --bg-page: #F5F0E8;
-            --text-primary: #2C2B28;
-            --card-bg: #FFFFFF;
-            --card-bg-alt: #FAF6F0;
-            --border-color: #E2D9CF;
-            --shadow: rgba(44,42,40,0.08);
-            --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
-            --footer-bg: #2E2B28;
-            --footer-text: #DDD2C2;
-            --btn-primary: #2C4A3E;
-            --btn-primary-hover: #B68B40;
-            --btn-secondary: #E2D9CF;
-            --btn-secondary-hover: #D1C6B9;
-            --gold: #B68B40;
-            --gold-light: #DAB066;
-            --green: #2C4A3E;
-            --green-light: #3F6B58;
-            --input-bg: #FAF6F0;
-        }
-
-        main {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 2fr 7fr 3fr;
-            gap: 20px;
-            padding: 20px;
-            background-color: var(--bg-page);
-            transition: grid-template-columns 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        
-        main.menu-collapsed {
-            grid-template-columns: auto 7fr 3fr;
-        }
-
-        header {
-            background: var(--header-bg);
-            width: 100%;
-            height: 117px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-bottom: 1px solid rgba(182, 139, 64, 0.3);
-        }
-        
-        .header-logo {
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .header-logo:hover {
-            transform: scale(1.02);
-        }
-        
-        .logo-icon {
-            font-size: 36px;
-            color: var(--gold);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-        
-        .logo-text {
-            font-size: 32px;
-            font-weight: 600;
-            font-family: 'Cormorant Garamond', serif;
-            color: #FAF6F0;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .logo-sub {
-            font-size: 12px;
-            font-family: 'Inter', sans-serif;
-            letter-spacing: 2px;
-            color: var(--gold-light);
-            margin-left: 4px;
-        }
-
-        footer {
-            background-color: var(--footer-bg);
-            width: 100%;
-            height: 48px;
-            flex-shrink: 0;
-            color: var(--footer-text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top: 1px solid var(--gold);
-            font-size: 13px;
-        }
-
-        .burger-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            min-height: 100%;
-            width: 100%;
-        }
-        
-        .burger {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 10px;
-            width: 100%;
-            transition: opacity 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .burger-trigger {
-            display: none;
-            width: 60px;
-            height: auto;
-            min-height: 300px;
-            background: var(--header-bg);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 4px 4px 12px var(--shadow);
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-size: 16px;
-            font-weight: 600;
-            color: #FAF6F0;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            border: 1px solid var(--gold);
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: scale(0.95);
-            flex-shrink: 0;
-            font-family: 'Cormorant Garamond', serif;
-            letter-spacing: 2px;
-        }
-        
-        .burger-trigger:hover {
-            transform: scale(1.02);
-            background: linear-gradient(135deg, #3F6B58, #2C4A3E);
-            border-color: var(--gold-light);
-        }
-        
-        .burger-trigger .trigger-icon {
-            font-size: 32px;
-            writing-mode: horizontal-tb;
-            display: inline-block;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .menu-collapsed .burger-container .burger-trigger {
-            display: flex;
-            animation: triggerSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-        
-        @keyframes triggerSlideIn {
-            0% { opacity: 0; transform: scale(0.95) translateX(-10px); }
-            100% { opacity: 1; transform: scale(1) translateX(0); }
-        }
-        
-        .menu-collapsed .burger-container .burger {
-            animation: menuSlideOut 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-            display: none;
-        }
-        
-        @keyframes menuSlideOut {
-            0% { opacity: 1; transform: translateX(0); }
-            100% { opacity: 0; transform: translateX(-20px); }
-        }
-        
-        .burger-container .burger {
-            animation: menuSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        
-        @keyframes menuSlideIn {
-            0% { opacity: 0; transform: translateX(-20px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-        
-        .burger-container .burger-trigger {
-            animation: triggerSlideOut 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-        }
-        
-        @keyframes triggerSlideOut {
-            0% { opacity: 1; transform: scale(1) translateX(0); display: flex; }
-            100% { opacity: 0; transform: scale(0.95) translateX(-10px); display: none; }
-        }
-
-        .burger button {
-            cursor: pointer;
-            padding: 12px 20px;
-            border: 2px solid var(--green);
-            border-radius: 15px;
-            text-align: center;
-            background-color: var(--card-bg-alt);
-            font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
-            box-shadow: 2px 2px 6px var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: flex-start;
-            color: var(--green);
-            font-weight: 500;
-        }
-        
-        .burger button:hover {
-            transform: translateX(5px) scale(1.02);
-            color: var(--gold);
-            background-color: var(--card-bg);
-            border-color: var(--gold);
-        }
-
-        .mainContainer {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            overflow-y: auto;
-            min-height: 200px;
-            display: flex;
-            gap: 15px;
-            flex-direction: column;
-            transition: all 0.3s ease;
-            width: 100%;
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-        
-        .mainContainer-element {
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 18px 24px;
-            display: grid;
-            grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 0.5fr;
-            align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: var(--card-bg-alt);
-            gap: 12px;
-        }
-        
-        .mainContainer-element:hover {
-            background: linear-gradient(97deg, var(--card-bg-alt) 0%, var(--card-bg) 100%);
-            transform: translateX(6px) scale(1.01);
-            box-shadow: 0 6px 16px var(--shadow);
-            border-color: var(--gold);
-        }
-        
-        .item-name {
-            font-weight: 600;
-            font-size: 17px;
-            color: var(--green);
-            font-family: 'Cormorant Garamond', serif;
-        }
-        
-        .item-category {
-            text-align: left;
-            font-weight: 500;
-            color: #5C6E5A;
-        }
-        
-        .item-price {
-            text-align: left;
-            font-weight: 500;
-            color: var(--gold);
-        }
-        
-        .item-date {
-            text-align: left;
-            font-size: 13px;
-            color: #9B8E7C;
-        }
-        
-        .delete-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            color: #C9BFAE;
-            font-size: 18px;
-            transition: all 0.2s;
-            padding: 8px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .delete-btn:hover {
-            color: #D1664A;
-            background-color: rgba(209, 102, 74, 0.1);
-            transform: scale(1.1);
-        }
-
-        .skeleton {
-            background: linear-gradient(90deg, var(--card-bg-alt) 25%, var(--border-color) 50%, var(--card-bg-alt) 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 15px;
-        }
-        
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        .skeleton-element {
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            height: 80px;
-        }
-
-        .userWidget {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 24px;
-            position: sticky;
-            top: 20px;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-        
-        .userWidget .iconInfo {
-            width: 140px;
-            height: 140px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 50%;
-            object-fit: cover;
-            background: linear-gradient(135deg, var(--green), var(--green-light));
-            padding: 8px;
-        }
-        
-        .userInfo-text {
-            width: 100%;
-        }
-        
-        .userInfo-text p {
-            font-size: 18px;
-            margin: 12px 0;
-            color: var(--green);
-            font-weight: 500;
-        }
-        
-        .user-name {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--green);
-            font-family: 'Cormorant Garamond', serif;
-        }
-        
-        .stats-info {
-            margin-top: 15px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-            width: 100%;
-        }
-        
-        .stats-info p {
-            font-size: 14px;
-            color: #5C6E5A;
-            margin: 8px 0;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(44, 42, 40, 0.85);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalSlide 0.3s ease;
-            border: 1px solid var(--gold);
-            box-shadow: 0 20px 40px var(--shadow);
-        }
-        
-        @keyframes modalSlide {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            color: var(--green);
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: #9B8E7C;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        
-        .modal-close:hover {
-            color: var(--gold);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--green);
-            font-size: 0.9rem;
-        }
-        
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.2s;
-            background: var(--input-bg);
-            color: var(--text-primary);
-        }
-        
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(182, 139, 64, 0.2);
-        }
-        
-        .category-row {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .category-row .form-select {
-            flex: 1;
-        }
-        
-        .category-row .form-input {
-            flex: 2;
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
-        
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 40px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn-primary {
-            background: var(--btn-primary);
-            color: #FAF6F0;
-        }
-        
-        .btn-primary:hover {
-            background: var(--btn-primary-hover);
-            color: var(--text-primary);
-        }
-        
-        .btn-secondary {
-            background: var(--btn-secondary);
-            color: var(--green);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--btn-secondary-hover);
-        }
-        
-        .btn-gold {
-            background: var(--gold);
-            color: #FAF6F0;
-        }
-        
-        .btn-gold:hover {
-            background: var(--green);
-        }
-        
-        .report-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .report-option {
-            padding: 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            background: var(--input-bg);
-        }
-        
-        .report-option:hover, .report-option.selected {
-            border-color: var(--gold);
-            background: rgba(182, 139, 64, 0.1);
-        }
-        
-        .report-option-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 40px;
-            color: #9B8E7C;
-            font-size: 18px;
-        }
-        
+        /* Стили (без изменений, сохранены из оригинала) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
+        :root { --bg-page: #F5F0E8; --text-primary: #2C2B28; --card-bg: #FFFFFF; --card-bg-alt: #FAF6F0; --border-color: #E2D9CF; --shadow: rgba(44,42,40,0.08); --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); --footer-bg: #2E2B28; --footer-text: #DDD2C2; --btn-primary: #2C4A3E; --btn-primary-hover: #B68B40; --btn-secondary: #E2D9CF; --btn-secondary-hover: #D1C6B9; --gold: #B68B40; --gold-light: #DAB066; --green: #2C4A3E; --green-light: #3F6B58; --input-bg: #FAF6F0; }
+        main { flex: 1; display: grid; grid-template-columns: 2fr 7fr 3fr; gap: 20px; padding: 20px; background-color: var(--bg-page); transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
+        main.menu-collapsed { grid-template-columns: auto 7fr 3fr; }
+        header { background: var(--header-bg); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
+        .header-logo { display: flex; align-items: baseline; gap: 8px; cursor: pointer; transition: transform 0.3s ease; }
+        .header-logo:hover { transform: scale(1.02); }
+        .logo-icon { font-size: 36px; color: var(--gold); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .logo-text { font-size: 32px; font-weight: 600; font-family: 'Cormorant Garamond', serif; color: #FAF6F0; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .logo-sub { font-size: 12px; font-family: 'Inter', sans-serif; letter-spacing: 2px; color: var(--gold-light); margin-left: 4px; }
+        footer { background-color: var(--footer-bg); width: 100%; height: 48px; flex-shrink: 0; color: var(--footer-text); display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--gold); font-size: 13px; }
+        .burger-container { position: relative; display: flex; align-items: center; min-height: 100%; width: 100%; }
+        .burger { display: flex; flex-direction: column; gap: 15px; padding: 10px; width: 100%; transition: opacity 0.4s cubic-bezier(0.2,0.9,0.4,1.1), transform 0.4s cubic-bezier(0.2,0.9,0.4,1.1); opacity: 1; transform: translateX(0); }
+        .burger-trigger { display: none; width: 60px; height: auto; min-height: 300px; background: var(--header-bg); border-radius: 15px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1.1); box-shadow: 4px 4px 12px var(--shadow); writing-mode: vertical-rl; text-orientation: mixed; font-size: 16px; font-weight: 600; color: #FAF6F0; align-items: center; justify-content: center; gap: 12px; border: 1px solid var(--gold); position: relative; overflow: hidden; opacity: 0; transform: scale(0.95); flex-shrink: 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; }
+        .burger-trigger:hover { transform: scale(1.02); background: linear-gradient(135deg,#3F6B58,#2C4A3E); border-color: var(--gold-light); }
+        .burger-trigger .trigger-icon { font-size: 32px; writing-mode: horizontal-tb; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .menu-collapsed .burger-container .burger-trigger { display: flex; animation: triggerSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
+        @keyframes triggerSlideIn { 0% { opacity: 0; transform: scale(0.95) translateX(-10px); } 100% { opacity: 1; transform: scale(1) translateX(0); } }
+        .menu-collapsed .burger-container .burger { animation: menuSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; display: none; }
+        @keyframes menuSlideOut { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-20px); } }
+        .burger-container .burger { animation: menuSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1); }
+        @keyframes menuSlideIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
+        .burger-container .burger-trigger { animation: triggerSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
+        @keyframes triggerSlideOut { 0% { opacity: 1; transform: scale(1) translateX(0); display: flex; } 100% { opacity: 0; transform: scale(0.95) translateX(-10px); display: none; } }
+        .burger button { cursor: pointer; padding: 12px 20px; border: 2px solid var(--green); border-radius: 15px; text-align: center; background-color: var(--card-bg-alt); font-size: 18px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); font-family: 'Inter', sans-serif; box-shadow: 2px 2px 6px var(--shadow); display: flex; align-items: center; gap: 10px; width: 100%; justify-content: flex-start; color: var(--green); font-weight: 500; }
+        .burger button:hover { transform: translateX(5px) scale(1.02); color: var(--gold); background-color: var(--card-bg); border-color: var(--gold); }
+        .mainContainer { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; overflow-y: auto; min-height: 200px; display: flex; gap: 15px; flex-direction: column; transition: all 0.3s ease; width: 100%; box-shadow: 0 4px 12px var(--shadow); }
+        .mainContainer-element { border: 1px solid var(--border-color); border-radius: 16px; padding: 18px 24px; display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 0.5fr; align-items: center; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); background-color: var(--card-bg-alt); gap: 12px; }
+        .mainContainer-element:hover { background: linear-gradient(97deg,var(--card-bg-alt) 0%,var(--card-bg) 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 6px 16px var(--shadow); border-color: var(--gold); }
+        .item-name { font-weight: 600; font-size: 17px; color: var(--green); font-family: 'Cormorant Garamond', serif; }
+        .item-category { text-align: left; font-weight: 500; color: #5C6E5A; }
+        .item-price { text-align: left; font-weight: 500; color: var(--gold); }
+        .item-date { text-align: left; font-size: 13px; color: #9B8E7C; }
+        .delete-btn { background: transparent; border: none; cursor: pointer; color: #C9BFAE; font-size: 18px; transition: all 0.2s; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+        .delete-btn:hover { color: #D1664A; background-color: rgba(209,102,74,0.1); transform: scale(1.1); }
+        .skeleton { background: linear-gradient(90deg, var(--card-bg-alt) 25%, var(--border-color) 50%, var(--card-bg-alt) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 15px; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-element { border: 1px solid var(--border-color); border-radius: 15px; padding: 20px; height: 80px; }
+        .userWidget { display: flex; flex-direction: column; gap: 20px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; position: sticky; top: 20px; text-align: center; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); justify-content: center; align-items: center; box-shadow: 0 4px 12px var(--shadow); }
+        .userWidget .iconInfo { width: 140px; height: 140px; display: block; margin-left: auto; margin-right: auto; border-radius: 50%; object-fit: cover; background: linear-gradient(135deg, var(--green), var(--green-light)); padding: 8px; }
+        .userInfo-text { width: 100%; }
+        .userInfo-text p { font-size: 18px; margin: 12px 0; color: var(--green); font-weight: 500; }
+        .user-name { font-size: 22px; font-weight: 600; color: var(--green); font-family: 'Cormorant Garamond', serif; }
+        .stats-info { margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; width: 100%; }
+        .stats-info p { font-size: 14px; color: #5C6E5A; margin: 8px 0; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,42,40,0.85); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card-bg); border-radius: 24px; padding: 2rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; animation: modalSlide 0.3s ease; border: 1px solid var(--gold); box-shadow: 0 20px 40px var(--shadow); }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--green); }
+        .modal-close { background: none; border: none; font-size: 1.8rem; color: #9B8E7C; cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: var(--gold); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--green); font-size: 0.9rem; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 1rem; transition: all 0.2s; background: var(--input-bg); color: var(--text-primary); }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(182,139,64,0.2); }
+        .category-row { display: flex; gap: 12px; align-items: center; }
+        .category-row .form-select { flex: 1; }
+        .category-row .form-input { flex: 2; }
+        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 40px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary { background: var(--btn-primary); color: #FAF6F0; }
+        .btn-primary:hover { background: var(--btn-primary-hover); color: var(--text-primary); }
+        .btn-secondary { background: var(--btn-secondary); color: var(--green); }
+        .btn-secondary:hover { background: var(--btn-secondary-hover); }
+        .btn-gold { background: var(--gold); color: #FAF6F0; }
+        .btn-gold:hover { background: var(--green); }
+        .report-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .report-option { padding: 1rem; border: 2px solid var(--border-color); border-radius: 16px; cursor: pointer; transition: all 0.2s; text-align: center; background: var(--input-bg); }
+        .report-option:hover, .report-option.selected { border-color: var(--gold); background: rgba(182,139,64,0.1); }
+        .report-option-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .empty-state { text-align: center; padding: 60px 40px; color: #9B8E7C; font-size: 18px; }
         @media (max-width: 768px) {
-            main {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            main.menu-collapsed {
-                grid-template-columns: 1fr;
-            }
-            .burger {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .burger button {
-                width: auto;
-                min-width: 120px;
-                justify-content: center;
-            }
-            .mainContainer-element {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                text-align: center;
-            }
-            .item-category, .item-price, .item-date, .delete-btn {
-                text-align: center;
-                justify-self: center;
-            }
-            .category-row {
-                flex-direction: column;
-            }
-            .report-options {
-                grid-template-columns: 1fr;
-            }
+            main { grid-template-columns: 1fr; gap: 15px; }
+            main.menu-collapsed { grid-template-columns: 1fr; }
+            .burger { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .burger button { width: auto; min-width: 120px; justify-content: center; }
+            .mainContainer-element { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+            .item-category, .item-price, .item-date, .delete-btn { text-align: center; justify-self: center; }
+            .category-row { flex-direction: column; }
+            .report-options { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -789,102 +252,67 @@
     </div>
 
     <script>
-        // -------------------- ДАННЫЕ --------------------
-        let items = [];
-        let userData = { name: "Александр Петров", registrationDate: "2024-05-10T00:00:00Z" };
-        
-        function loadItemsFromStorage() {
-            const stored = localStorage.getItem('collectionItems');
-            if (stored) {
-                items = JSON.parse(stored);
-            } else {
-                items = [
-                    { id: 1, name: "Рубашка Louis Vuitton", category: "Одежда", price: 10000, acquisitionDate: "2005-10-10" },
-                    { id: 2, name: "Картина 'Старый особняк'", category: "Живопись", price: 450000, acquisitionDate: "2023-05-15" },
-                    { id: 3, name: "Часы Patek Philippe", category: "Часы", price: 1250000, acquisitionDate: "2024-02-20" },
-                    { id: 4, name: "Монета 1898 года", category: "Монеты", price: 95000, acquisitionDate: "2024-01-10" },
-                    { id: 5, name: "Кожаный портфель Hermès", category: "Аксессуары", price: 340000, acquisitionDate: "2025-03-01" }
-                ];
-                saveItemsToStorage();
+        const API_BASE = 'http://127.0.0.1:8000';
+
+        function getAuthHeaders() {
+            const token = sessionStorage.getItem('token');
+            return token ? { 'Authorization': `Bearer ${token}` } : {};
+        }
+
+        async function apiFetch(url, options = {}) {
+            const res = await fetch(`${API_BASE}${url}`, {
+                ...options,
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', ...getAuthHeaders(), ...options.headers }
+            });
+            if (res.status === 302 || res.redirected) {
+                sessionStorage.clear();
+                window.location.href = 'logReg.html';
+                throw new Error('Сессия истекла');
             }
+            if (res.status === 401) {
+                sessionStorage.clear();
+                window.location.href = 'logReg.html';
+                throw new Error('Не авторизован');
+            }
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || err.error || `Ошибка ${res.status}`);
+            }
+            const data = await res.json();
+            if (data && typeof data === 'object' && Array.isArray(data.items)) {
+                return data.items;
+            }
+            return data;
         }
-        
-        function saveItemsToStorage() {
-            localStorage.setItem('collectionItems', JSON.stringify(items));
-        }
-        
+
+        let items = [];
+
         function formatDate(dateStr) {
             if (!dateStr) return "";
             const d = new Date(dateStr);
             return d.toLocaleDateString('ru-RU');
         }
-        
+
         function formatPrice(price) {
             return new Intl.NumberFormat('ru-RU').format(price) + " ₽";
         }
-        
-        function updateStats() {
-            document.getElementById('totalItemsCount').innerText = items.length;
-            const total = items.reduce((sum, i) => sum + i.price, 0);
-            document.getElementById('totalValue').innerText = formatPrice(total);
-        }
-        
-        function renderItems() {
-            const container = document.getElementById('mainContainer');
-            if (!container) return;
-            if (items.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open" style="font-size: 48px;"></i><p>Коллекция пуста. Добавьте первый предмет!</p></div>`;
-                updateStats();
-                return;
-            }
-            container.innerHTML = items.map(item => `
-                <div class="mainContainer-element" data-id="${item.id}">
-                    <span class="item-name">${escapeHtml(item.name)}</span>
-                    <span class="item-category">${escapeHtml(item.category)}</span>
-                    <span class="item-price">${formatPrice(item.price)}</span>
-                    <span class="item-date">${formatDate(item.acquisitionDate)}</span>
-                    <button class="delete-btn" data-id="${item.id}" title="Удалить предмет"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            `).join('');
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = parseInt(btn.dataset.id);
-                    if (confirm('Удалить предмет из коллекции?')) {
-                        removeItemById(id);
-                    }
-                });
-            });
-            
-            updateStats();
-        }
-        
-        function removeItemById(id) {
-            items = items.filter(i => i.id !== id);
-            saveItemsToStorage();
-            renderItems();
-            showNotification('Предмет удалён');
-        }
-        
+
         function escapeHtml(str) {
             if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
-        
-        function showNotification(message) {
+
+        function showNotification(message, bgColor = '#2C4A3E') {
             const notif = document.createElement('div');
             notif.textContent = message;
             notif.style.cssText = `
                 position: fixed;
                 bottom: 80px;
                 right: 20px;
-                background: var(--btn-primary);
+                background: ${bgColor};
                 color: white;
                 padding: 12px 24px;
                 border-radius: 40px;
@@ -899,150 +327,198 @@
                 setTimeout(() => notif.remove(), 300);
             }, 2000);
         }
-        
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
+
+        function renderItems() {
+            const container = document.getElementById('mainContainer');
+            if (!container) return;
+            if (items.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open" style="font-size: 48px;"></i><p>Коллекция пуста. Добавьте первый предмет!</p></div>`;
+                updateStats();
+                return;
             }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(styleSheet);
-        
-        async function loadUserInfo() {
-            await new Promise(r => setTimeout(r, 300));
-            const userDiv = document.getElementById('userInfo');
-            userDiv.innerHTML = `
-                <p class="user-name">Здравствуйте, ${escapeHtml(userData.name)}!</p>
-                <p class="user-date">Дата регистрации: ${formatDate(userData.registrationDate)}</p>
-            `;
+            container.innerHTML = items.map(item => `
+                <div class="mainContainer-element" data-id="${item.id}">
+                    <span class="item-name">${escapeHtml(item.name)}</span>
+                    <span class="item-category">${escapeHtml(item.category)}</span>
+                    <span class="item-price">${formatPrice(item.price)}</span>
+                    <span class="item-date">${formatDate(item.acquisition_date)}</span>
+                    <button class="delete-btn" data-id="${item.id}" title="Удалить предмет"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    if (confirm('Удалить предмет из коллекции?')) {
+                        await removeItemById(id);
+                    }
+                });
+            });
+            updateStats();
         }
-        
-        // -------------------- МОДАЛЬНЫЕ ОКНА --------------------
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        window.closeModal = closeModal;
-        
-        // Обработка выбора категории
-        const categorySelect = document.getElementById('categorySelect');
-        const categoryInput = document.getElementById('itemCategory');
-        
-        if (categorySelect && categoryInput) {
-            categorySelect.addEventListener('change', () => {
-                if (categorySelect.value) {
-                    categoryInput.value = categorySelect.value;
-                }
+
+        async function loadItems() {
+            try {
+                const data = await apiFetch('/api/items/');
+                items = Array.isArray(data) ? data : (data.items || []);
+                renderItems();
+            } catch (err) {
+                console.error(err);
+                showNotification('Ошибка загрузки коллекции', '#D1664A');
+            }
+        }
+
+        async function removeItemById(id) {
+            try {
+                await apiFetch(`/api/items/${id}/delete/`, { method: 'DELETE' });
+                await loadItems();
+                showNotification('Предмет удалён');
+                localStorage.setItem('collectionChanged', Date.now().toString());
+            } catch (err) {
+                alert('Ошибка удаления: ' + err.message);
+            }
+        }
+
+        async function updateStats() {
+            try {
+                const stats = await apiFetch('/api/stats/');
+                document.getElementById('totalItemsCount').innerText = stats.total_items || 0;
+                document.getElementById('totalValue').innerText = formatPrice(stats.total_value || 0);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadUserInfo() {
+            const userId = sessionStorage.getItem('userId');
+            if (!userId) {
+                console.warn('userId не найден в sessionStorage');
+                document.getElementById('userInfo').innerHTML = '<p>Ошибка: не удалось определить пользователя</p>';
+                return;
+            }
+            try {
+                const profile = await apiFetch(`/api/users/${userId}/`);
+                const userDiv = document.getElementById('userInfo');
+                userDiv.innerHTML = `
+                    <p class="user-name">Здравствуйте, ${escapeHtml(profile.username)}!</p>
+                    <p class="user-date">Дата регистрации: ${formatDate(profile.registration_date)}</p>
+                `;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('userInfo').innerHTML = '<p>Ошибка загрузки профиля</p>';
+            }
+        }
+
+        async function updateCategorySelect() {
+            try {
+                const cats = await apiFetch('/api/categories/');
+                const select = document.getElementById('reportCategory');
+                select.innerHTML = '<option value="all">Все категории</option>' + (Array.isArray(cats) ? cats.map(c => `<option value="${c}">${c}</option>`).join('') : '');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Обработчики для выбора типа отчёта (импорт/экспорт)
+        function initReportTypeSwitcher() {
+            const options = document.querySelectorAll('.report-option');
+            const categoryGroup = document.getElementById('categorySelectGroup');
+            const periodGroup = document.getElementById('periodSelectGroup');
+            
+            options.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    options.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    const type = opt.dataset.type;
+                    
+                    if (type === 'category') {
+                        categoryGroup.style.display = 'block';
+                        periodGroup.style.display = 'none';
+                    } else if (type === 'period') {
+                        categoryGroup.style.display = 'none';
+                        periodGroup.style.display = 'block';
+                    } else {
+                        categoryGroup.style.display = 'none';
+                        periodGroup.style.display = 'none';
+                    }
+                });
             });
         }
-        
-        document.getElementById('addItemForm')?.addEventListener('submit', (e) => {
+
+        document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('itemName').value.trim();
             let category = document.getElementById('itemCategory').value.trim();
-            if (!category && categorySelect.value) {
-                category = categorySelect.value;
-            }
+            const categorySelect = document.getElementById('categorySelect');
+            if (!category && categorySelect.value) category = categorySelect.value;
             const price = parseFloat(document.getElementById('itemPrice').value);
             const date = document.getElementById('itemDate').value;
             if (!name || !category || isNaN(price) || !date) return;
-            const newId = Date.now();
-            items.push({ id: newId, name, category, price, acquisitionDate: date });
-            saveItemsToStorage();
-            renderItems();
-            closeModal('addItemModal');
-            document.getElementById('addItemForm').reset();
-            showNotification('Предмет добавлен');
-            if (document.getElementById('exportImportModal').classList.contains('active')) {
-                updateCategorySelect();
+            try {
+                await apiFetch('/api/items/create/', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, category, price, acquisitionDate: date })
+                });
+                await loadItems();
+                closeModal('addItemModal');
+                document.getElementById('addItemForm').reset();
+                showNotification('Предмет добавлен');
+                localStorage.setItem('collectionChanged', Date.now().toString());
+            } catch (err) {
+                alert('Ошибка: ' + err.message);
             }
         });
-        
-        const exportImportBtn = document.getElementById('exportImportBtn');
-        if (exportImportBtn) exportImportBtn.addEventListener('click', () => {
-            updateCategorySelect();
-            openModal('exportImportModal');
-        });
-        
-        function updateCategorySelect() {
-            const cats = [...new Set(items.map(i => i.category))];
-            const select = document.getElementById('reportCategory');
-            if (select) {
-                const currentVal = select.value;
-                select.innerHTML = '<option value="all">Все категории</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-                if (currentVal && cats.includes(currentVal)) select.value = currentVal;
-                else select.value = 'all';
-            }
-        }
-        
-        document.querySelectorAll('.report-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                document.querySelectorAll('.report-option').forEach(o => o.classList.remove('selected'));
-                opt.classList.add('selected');
-                const type = opt.dataset.type;
-                document.getElementById('categorySelectGroup').style.display = type === 'category' ? 'block' : 'none';
-                document.getElementById('periodSelectGroup').style.display = type === 'period' ? 'block' : 'none';
-                if (type === 'category') updateCategorySelect();
-            });
-        });
-        
-        document.getElementById('exportReportBtn')?.addEventListener('click', () => {
-            const type = document.querySelector('.report-option.selected').dataset.type;
+
+        document.getElementById('exportReportBtn').addEventListener('click', async () => {
+            const selectedOption = document.querySelector('.report-option.selected');
+            if (!selectedOption) return;
+            const type = selectedOption.dataset.type;
             const sort = document.getElementById('sortType').value;
             const format = document.getElementById('exportFormat').value;
-            let filtered = [...items];
+            let url = `/api/export/?format=${format}&sort=${sort}`;
+            
             if (type === 'category') {
                 const cat = document.getElementById('reportCategory').value;
-                if (cat !== 'all') filtered = filtered.filter(i => i.category === cat);
+                if (cat && cat !== 'all') {
+                    url += `&category=${encodeURIComponent(cat)}`;
+                }
             } else if (type === 'period') {
                 const from = document.getElementById('dateFrom').value;
                 const to = document.getElementById('dateTo').value;
-                if (from) filtered = filtered.filter(i => i.acquisitionDate >= from);
-                if (to) filtered = filtered.filter(i => i.acquisitionDate <= to);
+                if (from) url += `&from=${from}`;
+                if (to) url += `&to=${to}`;
             }
-            filtered.sort((a,b) => {
-                if (sort === 'date-desc') return new Date(b.acquisitionDate) - new Date(a.acquisitionDate);
-                if (sort === 'date-asc') return new Date(a.acquisitionDate) - new Date(b.acquisitionDate);
-                if (sort === 'price-desc') return b.price - a.price;
-                if (sort === 'price-asc') return a.price - b.price;
-                if (sort === 'name-asc') return a.name.localeCompare(b.name);
-                return 0;
-            });
-            const timestamp = new Date().toISOString().slice(0,10);
-            if (format === 'csv') {
-                let csv = "Название,Категория,Стоимость (₽),Дата получения\n";
-                filtered.forEach(i => {
-                    csv += `"${i.name}","${i.category}",${i.price},"${i.acquisitionDate}"\n`;
+            // для type === 'all' никаких дополнительных параметров не добавляем
+            
+            try {
+                const token = sessionStorage.getItem('token');
+                const res = await fetch(`${API_BASE}${url}`, {
+                    credentials: 'include',
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
                 });
-                const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+                if (!res.ok) throw new Error('Ошибка экспорта');
+                const blob = await res.blob();
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = `old_money_report_${timestamp}.csv`;
+                link.download = `old_money_report_${new Date().toISOString().slice(0,10)}.${format}`;
                 link.click();
-            } else if (format === 'json') {
-                const json = JSON.stringify(filtered, null, 2);
-                const blob = new Blob([json], { type: 'application/json' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `old_money_report_${timestamp}.json`;
-                link.click();
+                closeModal('exportImportModal');
+                showNotification('Отчёт выгружен');
+            } catch (err) {
+                alert(err.message);
             }
-            closeModal('exportImportModal');
-            showNotification('Отчёт выгружен');
         });
-        
-        document.getElementById('importDataBtn')?.addEventListener('click', () => {
+
+        document.getElementById('importDataBtn').addEventListener('click', () => {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.csv,.json';
-            input.onchange = (e) => {
+            input.onchange = async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
-                reader.onload = (ev) => {
+                reader.onload = async (ev) => {
                     try {
                         let imported = [];
                         if (file.name.endsWith('.json')) {
@@ -1060,21 +536,27 @@
                                     const price = parseFloat(parts[2]);
                                     const date = parts[3].replace(/^"|"$/g, '');
                                     if (name && category && !isNaN(price) && date) {
-                                        imported.push({ id: Date.now() + Math.random(), name, category, price, acquisitionDate: date });
+                                        imported.push({ name, category, price, acquisitionDate: date });
                                     }
                                 }
                             }
                         }
-                        if (imported.length) {
-                            items.push(...imported);
-                            saveItemsToStorage();
-                            renderItems();
-                            showNotification(`Импортировано ${imported.length} предметов`);
-                        } else {
-                            alert('Некорректные данные или пустой файл');
+                        if (!imported.length) throw new Error('Нет данных для импорта');
+                        let success = 0;
+                        for (const item of imported) {
+                            try {
+                                await apiFetch('/api/items/create/', {
+                                    method: 'POST',
+                                    body: JSON.stringify(item)
+                                });
+                                success++;
+                            } catch (err) { console.warn(err); }
                         }
+                        await loadItems();
+                        showNotification(`Импортировано ${success} из ${imported.length} предметов`);
                         closeModal('exportImportModal');
-                    } catch(err) {
+                        localStorage.setItem('collectionChanged', Date.now().toString());
+                    } catch (err) {
                         alert('Ошибка импорта: ' + err.message);
                     }
                 };
@@ -1082,8 +564,25 @@
             };
             input.click();
         });
-        
-        // -------------------- СВОРАЧИВАНИЕ МЕНЮ --------------------
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        window.closeModal = closeModal;
+
+        document.getElementById('addItemBtn').addEventListener('click', () => openModal('addItemModal'));
+        document.getElementById('exportImportBtn').addEventListener('click', async () => {
+            await updateCategorySelect();
+            openModal('exportImportModal');
+        });
+
+        const categorySelect = document.getElementById('categorySelect');
+        const categoryInput = document.getElementById('itemCategory');
+        if (categorySelect && categoryInput) {
+            categorySelect.addEventListener('change', () => {
+                if (categorySelect.value) categoryInput.value = categorySelect.value;
+            });
+        }
+
         const mainElement = document.querySelector('main');
         const collapseMenuBtn = document.getElementById('collapseMenuBtn');
         const expandMenuBtn = document.getElementById('expandMenuBtn');
@@ -1092,7 +591,7 @@
         if (collapseMenuBtn) collapseMenuBtn.addEventListener('click', collapseMenu);
         if (expandMenuBtn) expandMenuBtn.addEventListener('click', expandMenu);
         if (localStorage.getItem('menuCollapsed') === 'true') mainElement.classList.add('menu-collapsed');
-        
+
         function adjustTriggerHeight() {
             const trigger = document.getElementById('expandMenuBtn');
             const mainCont = document.querySelector('.mainContainer');
@@ -1100,27 +599,37 @@
                 trigger.style.minHeight = Math.min(Math.max(mainCont.offsetHeight, 250), 700) + 'px';
             }
         }
-        
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'collectionItems') {
-                loadItemsFromStorage();
-                renderItems();
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'collectionChanged' || e.key === 'wishlistChanged') {
+                loadItems();
+                updateStats();
             }
         });
-        
-        window.addEventListener('load', () => { 
-            loadItemsFromStorage();
-            renderItems();
-            loadUserInfo();
-            adjustTriggerHeight(); 
+
+        window.addEventListener('load', async () => {
+            if (!sessionStorage.getItem('userId') && !sessionStorage.getItem('token')) {
+                window.location.href = 'logReg.html';
+                return;
+            }
+            await loadItems();
+            await loadUserInfo();
+            initReportTypeSwitcher();
+            adjustTriggerHeight();
         });
         window.addEventListener('resize', adjustTriggerHeight);
         const observer = new MutationObserver(adjustTriggerHeight);
         if (document.getElementById('mainContainer')) observer.observe(document.getElementById('mainContainer'), { childList: true, subtree: true });
         
-        document.querySelector('[data-page="main"]')?.addEventListener('click', () => { renderItems(); });
-        document.getElementById('headerLogo')?.addEventListener('click', () => { renderItems(); });
-        document.getElementById('addItemBtn')?.addEventListener('click', () => openModal('addItemModal'));
+        document.querySelector('[data-page="main"]')?.addEventListener('click', () => loadItems());
+        document.getElementById('headerLogo')?.addEventListener('click', () => loadItems());
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

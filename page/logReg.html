@@ -3,22 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>logRegPage</title>
+    <title>Вход / Регистрация | Old Money</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="logReg">
-    
     <div>
         <div class="image"><img src="../assets/icon.svg" alt=""></div>
-        <form action="">
-            <div><input type="text" name="username" placeholder="Введите ваш логин"></div>
-            <div><input type="password" name="password" placeholder="Введите ваш пароль"></div>
+        <form id="authForm">
+            <div><input type="text" name="username" id="username" placeholder="Введите ваш логин" required></div>
+            <div><input type="password" name="password" id="password" placeholder="Введите ваш пароль" required></div>
             <div class="buttons">
-                <button type="button" class="logButton" onclick="window.location.href='main.html';">Войти</button>
-                <button type="submit" class="regButton">Зарегестрироваться</button>
+                <button type="button" id="loginBtn" class="logButton">Войти</button>
+                <button type="button" id="registerBtn" class="regButton">Зарегистрироваться</button>
             </div>
         </form>
     </div>
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
 
+        async function apiCall(url, options = {}) {
+            const res = await fetch(`${API_BASE}${url}`, {
+                ...options,
+                credentials: 'include', // передаём cookies сессии
+                headers: { 'Content-Type': 'application/json', ...options.headers }
+            });
+            if (!res.ok) {
+                const error = await res.json().catch(() => ({}));
+                throw new Error(error.message || error.error || `Ошибка ${res.status}`);
+            }
+            return res.json();
+        }
+
+        document.getElementById('loginBtn').onclick = async () => {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            if (!username || !password) return alert('Заполните все поля');
+            try {
+                const data = await apiCall('/api/login/', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+                console.log('Ответ /api/login/:', data);
+                // Пытаемся найти ID пользователя в разных возможных полях
+                const userId = data.user_id || data.id || data.userId;
+                if (!userId) {
+                    console.error('Не удалось найти ID пользователя в ответе', data);
+                    alert('Ошибка: сервер не вернул ID пользователя. Проверьте консоль.');
+                    return;
+                }
+                sessionStorage.setItem('userId', userId);
+                sessionStorage.setItem('username', data.username || username);
+                // Если сервер возвращает токен – сохраняем (на всякий случай)
+                if (data.token) sessionStorage.setItem('token', data.token);
+                window.location.href = 'main.html';
+            } catch (err) {
+                alert('Ошибка входа: ' + err.message);
+            }
+        };
+
+        document.getElementById('registerBtn').onclick = async () => {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            if (!username || !password) return alert('Заполните все поля');
+            try {
+                await apiCall('/api/register/', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, password })
+                });
+                alert('Регистрация успешна. Теперь войдите.');
+            } catch (err) {
+                alert('Ошибка регистрации: ' + err.message);
+            }
+        };
+    </script>
 </body>
 </html>

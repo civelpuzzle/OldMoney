@@ -9,26 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Стили без изменений (как в оригинале) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
-        :root {
-            --bg-page: #F5F0E8;
-            --text-primary: #2C2B28;
-            --card-bg: #FFFFFF;
-            --card-bg-alt: #FAF6F0;
-            --border-color: #E2D9CF;
-            --shadow: rgba(44,42,40,0.08);
-            --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
-            --footer-bg: #2E2B28;
-            --footer-text: #DDD2C2;
-            --btn-primary: #2C4A3E;
-            --btn-primary-hover: #B68B40;
-            --gold: #B68B40;
-            --gold-light: #DAB066;
-            --green: #2C4A3E;
-            --green-light: #3F6B58;
-            --input-bg: #FAF6F0;
-        }
+        :root { --bg-page: #F5F0E8; --text-primary: #2C2B28; --card-bg: #FFFFFF; --card-bg-alt: #FAF6F0; --border-color: #E2D9CF; --shadow: rgba(44,42,40,0.08); --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); --footer-bg: #2E2B28; --footer-text: #DDD2C2; --btn-primary: #2C4A3E; --btn-primary-hover: #B68B40; --gold: #B68B40; --gold-light: #DAB066; --green: #2C4A3E; --green-light: #3F6B58; --input-bg: #FAF6F0; }
         main { flex: 1; display: grid; grid-template-columns: 2fr 10fr; gap: 20px; padding: 20px; background-color: var(--bg-page); transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
         main.menu-collapsed { grid-template-columns: auto 10fr; }
         header { background: var(--header-bg); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
@@ -70,13 +54,31 @@
         .action-btn:hover { transform: scale(1.1); }
         .add-to-collection-btn:hover { color: var(--gold); background-color: rgba(182,139,64,0.1); }
         .remove-btn:hover { color: #D1664A; background-color: rgba(209,102,74,0.1); }
+        .empty-state .browse-btn { background: var(--btn-primary); color: #FAF6F0; border: none; border-radius: 60px; padding: 12px 28px; font-size: 16px; font-weight: 500; display: inline-flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; margin-top: 28px; font-family: 'Inter', sans-serif; box-shadow: 0 2px 8px var(--shadow); }
+        .empty-state .browse-btn:hover { background: var(--btn-primary-hover); transform: translateY(-2px); box-shadow: 0 6px 14px var(--shadow); color: var(--text-primary); }
         .empty-state { text-align: center; padding: 80px 40px; color: #9B8E7C; }
         .empty-state i { font-size: 80px; margin-bottom: 24px; opacity: 0.5; color: var(--gold); }
-        .browse-btn { margin-top: 24px; padding: 12px 32px; background: var(--btn-primary); color: white; border: none; border-radius: 40px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
-        .browse-btn:hover { background: var(--btn-primary-hover); transform: translateY(-2px); }
         .skeleton { background: linear-gradient(90deg,var(--card-bg-alt) 25%,var(--border-color) 50%,var(--card-bg-alt) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 15px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .skeleton-element { border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; height: 100px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,42,40,0.85); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card-bg); border-radius: 24px; padding: 2rem; max-width: 500px; width: 90%; animation: modalSlide 0.3s ease; border: 1px solid var(--gold); box-shadow: 0 20px 40px var(--shadow); }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--green); }
+        .modal-close { background: none; border: none; font-size: 1.8rem; color: #9B8E7C; cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: var(--gold); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--green); }
+        .form-input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 12px; font-family: 'Inter', sans-serif; background: var(--input-bg); color: var(--text-primary); }
+        .form-input:focus { outline: none; border-color: var(--gold); }
+        .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+        .btn { padding: 0.75rem 1.5rem; border-radius: 40px; font-weight: 500; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+        .btn-primary { background: var(--btn-primary); color: #FAF6F0; }
+        .btn-primary:hover { background: var(--btn-primary-hover); color: var(--text-primary); }
+        .btn-secondary { background: var(--btn-secondary); color: var(--green); }
+        .btn-secondary:hover { background: var(--btn-secondary-hover); }
         @media (max-width: 768px) {
             main { grid-template-columns: 1fr; gap: 15px; }
             main.menu-collapsed { grid-template-columns: 1fr; }
@@ -129,27 +131,59 @@
         <span>© 2025 OLD MONEY — Избранные коллекции</span>
     </footer>
 
+    <div class="modal" id="datePickerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Выберите дату приобретения</h3>
+                <button class="modal-close" onclick="closeDateModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Дата получения предмета</label>
+                <input type="date" class="form-input" id="acquisitionDatePicker" value="">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeDateModal()">Отмена</button>
+                <button class="btn btn-primary" id="confirmDateBtn">Добавить в коллекцию</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        let wishlistItems = [];
+        const API_BASE = 'http://127.0.0.1:8000';
 
-        function loadWishlistFromStorage() {
-            const stored = localStorage.getItem('wishlistItems');
-            if (stored) {
-                wishlistItems = JSON.parse(stored);
-            } else {
-                wishlistItems = [
-                    { id: 1, name: "Винтажная камера Leica M3", category: "Фотография", price: 185000, acquisitionDate: "2025-03-01" },
-                    { id: 2, name: "Картина 'Осенний парк'", category: "Живопись", price: 45000, acquisitionDate: "2025-02-15" },
-                    { id: 3, name: "Архитектурный эскиз 'Зимний дворец'", category: "Графика", price: 28900, acquisitionDate: "2025-01-10" },
-                    { id: 4, name: "Скульптура 'Мыслитель' миниатюра", category: "Скульптура", price: 12500, acquisitionDate: "2024-12-05" }
-                ];
-                saveWishlistToStorage();
+        function getAuthHeaders() {
+            const token = sessionStorage.getItem('token');
+            return token ? { 'Authorization': `Bearer ${token}` } : {};
+        }
+
+        async function apiFetch(url, options = {}) {
+            const res = await fetch(`${API_BASE}${url}`, {
+                ...options,
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', ...getAuthHeaders(), ...options.headers }
+            });
+            if (res.status === 302 || res.redirected) {
+                sessionStorage.clear();
+                window.location.href = 'logReg.html';
+                throw new Error('Сессия истекла');
             }
+            if (res.status === 401) {
+                sessionStorage.clear();
+                window.location.href = 'logReg.html';
+                throw new Error('Не авторизован');
+            }
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || err.error || `Ошибка ${res.status}`);
+            }
+            const data = await res.json();
+            if (data && typeof data === 'object' && Array.isArray(data.items)) {
+                return data.items;
+            }
+            return data;
         }
 
-        function saveWishlistToStorage() {
-            localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
-        }
+        let wishlistItems = [];
 
         function formatDate(dateStr) {
             if (!dateStr) return "";
@@ -161,78 +195,11 @@
             return new Intl.NumberFormat('ru-RU').format(price) + " ₽";
         }
 
-        function renderWishlist() {
-            const container = document.getElementById('wishlistContent');
-            const countSpan = document.getElementById('wishlistCount');
-            if (!container) return;
-            if (wishlistItems.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="far fa-heart"></i>
-                        <p>Ваш список желаемого пуст</p>
-                        <p class="empty-sub">Добавляйте понравившиеся предметы из поиска</p>
-                        <button class="browse-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> Исследовать коллекции</button>
-                    </div>
-                `;
-                if (countSpan) countSpan.textContent = '0 предметов';
-                return;
-            }
-            container.innerHTML = `
-                <div class="wishlist-items-container">
-                    ${wishlistItems.map(item => `
-                        <div class="wishlist-item" data-id="${item.id}">
-                            <span class="item-name">${escapeHtml(item.name)}</span>
-                            <span class="item-category">${escapeHtml(item.category || 'Без категории')}</span>
-                            <span class="item-price">${formatPrice(item.price)}</span>
-                            <span class="item-date">${formatDate(item.acquisitionDate)}</span>
-                            <div class="item-actions">
-                                <button class="action-btn add-to-collection-btn" data-id="${item.id}" title="Добавить в коллекцию"><i class="fas fa-plus-circle"></i></button>
-                                <button class="action-btn remove-btn" data-id="${item.id}" title="Удалить"><i class="fas fa-times"></i></button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            if (countSpan) countSpan.textContent = `${wishlistItems.length} ${getDeclension(wishlistItems.length, 'предмет', 'предмета', 'предметов')}`;
-            
-            document.querySelectorAll('.add-to-collection-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = parseInt(btn.dataset.id);
-                    addToMainCollection(id);
-                });
-            });
-            document.querySelectorAll('.remove-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = parseInt(btn.dataset.id);
-                    removeFromWishlist(id);
-                });
-            });
-        }
-
-        function addToMainCollection(wishlistId) {
-            const item = wishlistItems.find(i => i.id === wishlistId);
-            if (!item) return;
-            let collection = JSON.parse(localStorage.getItem('collectionItems') || '[]');
-            const newItem = {
-                id: Date.now(),
-                name: item.name,
-                category: item.category || 'Другое',
-                price: item.price,
-                acquisitionDate: item.acquisitionDate || new Date().toISOString().slice(0,10)
-            };
-            collection.push(newItem);
-            localStorage.setItem('collectionItems', JSON.stringify(collection));
-            removeFromWishlist(wishlistId);
-            showNotification('Добавлено в коллекцию');
-        }
-
-        function removeFromWishlist(id) {
-            wishlistItems = wishlistItems.filter(i => i.id !== id);
-            saveWishlistToStorage();
-            renderWishlist();
-            showNotification('Удалено из желаемого', '#D1664A');
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         function showNotification(message, bgColor = '#2C4A3E') {
@@ -267,19 +234,123 @@
             return five;
         }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+        async function loadWishlist() {
+            try {
+                const data = await apiFetch('/api/wishlist/');
+                wishlistItems = Array.isArray(data) ? data : (data.items || []);
+                renderWishlist();
+            } catch (err) {
+                console.error(err);
+                showNotification('Ошибка загрузки желаемого', '#D1664A');
+            }
         }
 
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-        `;
-        document.head.appendChild(style);
+        async function removeFromWishlist(id) {
+            try {
+                await apiFetch(`/api/wishlist/${id}/`, { method: 'DELETE' });
+                await loadWishlist();
+                showNotification('Удалено из желаемого', '#D1664A');
+                localStorage.setItem('wishlistChanged', Date.now().toString());
+            } catch (err) {
+                alert('Ошибка удаления: ' + err.message);
+            }
+        }
+
+        let pendingAddItem = null;
+
+        function openDatePicker(wishlistItem) {
+            pendingAddItem = wishlistItem;
+            const today = new Date().toISOString().slice(0,10);
+            document.getElementById('acquisitionDatePicker').value = today;
+            document.getElementById('datePickerModal').classList.add('active');
+        }
+
+        function closeDateModal() {
+            document.getElementById('datePickerModal').classList.remove('active');
+            pendingAddItem = null;
+        }
+
+        async function addToMainCollectionWithDate(wishlistItem, acquisitionDate) {
+            try {
+                await apiFetch('/api/items/create/', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: wishlistItem.name,
+                        category: wishlistItem.category,
+                        price: wishlistItem.price,
+                        acquisitionDate: acquisitionDate
+                    })
+                });
+                await removeFromWishlist(wishlistItem.id);
+                showNotification('Добавлено в коллекцию с датой ' + formatDate(acquisitionDate));
+                localStorage.setItem('collectionChanged', Date.now().toString());
+            } catch (err) {
+                alert('Ошибка: ' + err.message);
+            }
+        }
+
+        function renderWishlist() {
+            const container = document.getElementById('wishlistContent');
+            const countSpan = document.getElementById('wishlistCount');
+            if (!container) return;
+            if (wishlistItems.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-heart"></i>
+                        <p>Ваш список желаемого пуст</p>
+                        <p class="empty-sub">Добавляйте понравившиеся предметы из поиска</p>
+                        <button class="browse-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> Исследовать коллекции</button>
+                    </div>
+                `;
+                if (countSpan) countSpan.textContent = '0 предметов';
+                return;
+            }
+            container.innerHTML = `
+                <div class="wishlist-items-container">
+                    ${wishlistItems.map(item => `
+                        <div class="wishlist-item" data-id="${item.id}">
+                            <span class="item-name">${escapeHtml(item.name)}</span>
+                            <span class="item-category">${escapeHtml(item.category || 'Без категории')}</span>
+                            <span class="item-price">${formatPrice(item.price)}</span>
+                            <span class="item-date">${formatDate(item.acquisition_date)}</span>
+                            <div class="item-actions">
+                                <button class="action-btn add-to-collection-btn" data-id="${item.id}" title="Добавить в коллекцию"><i class="fas fa-plus-circle"></i></button>
+                                <button class="action-btn remove-btn" data-id="${item.id}" title="Удалить"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            if (countSpan) countSpan.textContent = `${wishlistItems.length} ${getDeclension(wishlistItems.length, 'предмет', 'предмета', 'предметов')}`;
+            
+            document.querySelectorAll('.add-to-collection-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    const item = wishlistItems.find(i => i.id === id);
+                    if (item) openDatePicker(item);
+                });
+            });
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = parseInt(btn.dataset.id);
+                    removeFromWishlist(id);
+                });
+            });
+        }
+
+        document.getElementById('confirmDateBtn').addEventListener('click', async () => {
+            if (pendingAddItem) {
+                const newDate = document.getElementById('acquisitionDatePicker').value;
+                if (!newDate) {
+                    showNotification('Выберите дату', '#D1664A');
+                    return;
+                }
+                await addToMainCollectionWithDate(pendingAddItem, newDate);
+                closeDateModal();
+            }
+        });
 
         const mainElement = document.querySelector('main');
         const collapseMenuBtn = document.getElementById('collapseMenuBtn');
@@ -298,19 +369,22 @@
             }
         }
 
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'wishlistItems') {
-                loadWishlistFromStorage();
-                renderWishlist();
+        window.addEventListener('load', async () => {
+            if (!sessionStorage.getItem('userId') && !sessionStorage.getItem('token')) {
+                window.location.href = 'logReg.html';
+                return;
             }
-        });
-        
-        window.addEventListener('load', () => {
-            loadWishlistFromStorage();
-            renderWishlist();
+            await loadWishlist();
             adjustTriggerHeight();
         });
         window.addEventListener('resize', adjustTriggerHeight);
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

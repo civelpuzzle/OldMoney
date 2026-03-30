@@ -9,26 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Стили без изменений (как в оригинале) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
-        :root {
-            --bg-page: #F5F0E8;
-            --text-primary: #2C2B28;
-            --card-bg: #FFFFFF;
-            --card-bg-alt: #FAF6F0;
-            --border-color: #E2D9CF;
-            --shadow: rgba(44,42,40,0.08);
-            --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
-            --footer-bg: #2E2B28;
-            --footer-text: #DDD2C2;
-            --btn-primary: #2C4A3E;
-            --btn-primary-hover: #B68B40;
-            --gold: #B68B40;
-            --gold-light: #DAB066;
-            --green: #2C4A3E;
-            --green-light: #3F6B58;
-            --input-bg: #FAF6F0;
-        }
+        :root { --bg-page: #F5F0E8; --text-primary: #2C2B28; --card-bg: #FFFFFF; --card-bg-alt: #FAF6F0; --border-color: #E2D9CF; --shadow: rgba(44,42,40,0.08); --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); --footer-bg: #2E2B28; --footer-text: #DDD2C2; --btn-primary: #2C4A3E; --btn-primary-hover: #B68B40; --gold: #B68B40; --gold-light: #DAB066; --green: #2C4A3E; --green-light: #3F6B58; --input-bg: #FAF6F0; }
         main { flex: 1; display: grid; grid-template-columns: 2fr 10fr; gap: 20px; padding: 20px; background-color: var(--bg-page); transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
         main.menu-collapsed { grid-template-columns: auto 10fr; }
         header { background: var(--header-bg); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
@@ -156,209 +140,49 @@
         <span>© 2025 OLD MONEY — Сообщество коллекционеров</span>
     </footer>
 
-    <!-- Модальное окно для просмотра предметов пользователя -->
     <div class="modal" id="userItemsModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="modalTitle">Предметы коллекции</h3>
                 <button class="modal-close" onclick="closeModal('userItemsModal')">&times;</button>
             </div>
-            <div id="modalItemsList">
-                <!-- Сюда будет вставлена таблица предметов -->
-            </div>
+            <div id="modalItemsList"></div>
         </div>
     </div>
 
     <script>
-        // Данные пользователей
-        const users = [
-            { id: 1, name: "Екатерина Волконская", initials: "ЕВ", tags: ["пейзаж", "осень", "усадьбы"] },
-            { id: 2, name: "Дмитрий Строганов", initials: "ДС", tags: ["часы", "антиквариат", "история"] },
-            { id: 3, name: "Анна Михайлова", initials: "АМ", tags: ["улица", "город", "архитектура"] },
-            { id: 4, name: "Константин Орлов", initials: "КО", tags: ["живопись", "современное искусство"] },
-            { id: 5, name: "Павел Шереметьев", initials: "ПШ", tags: ["автомобили", "винтаж", "ретро"] },
-            { id: 6, name: "Мария Кшесинская", initials: "МК", tags: ["балет", "театр", "искусство"] },
-            { id: 7, name: "Алексей Воронихин", initials: "АВ", tags: ["архитектура", "чертежи", "классицизм"] },
-            { id: 8, name: "Татьяна Ларина", initials: "ТЛ", tags: ["путешествия", "россия", "монастыри"] },
-            { id: 9, name: "Сергей Кузнецов", initials: "СК", tags: ["фарфор", "коллекционирование"] },
-            { id: 10, name: "Игорь Петров", initials: "ИП", tags: ["природа", "пейзаж", "вулканы"] }
-        ];
+        const API_BASE = 'http://127.0.0.1:8000';
 
-        // Реальные предметы пользователей
-        const userItemsMap = {
-            1: [
-                { id: 101, name: "Фотография 'Золотая аллея'", category: "Фотография", price: 3500, acquisitionDate: "2024-09-10" },
-                { id: 102, name: "Этюд 'Осенний парк'", category: "Живопись", price: 12000, acquisitionDate: "2024-08-15" },
-                { id: 103, name: "Старинная открытка", category: "Графика", price: 800, acquisitionDate: "2024-10-01" },
-                { id: 104, name: "Пейзаж 'Туманное утро'", category: "Живопись", price: 7500, acquisitionDate: "2024-11-20" },
-                { id: 105, name: "Альбом 'Усадьбы России'", category: "Книги", price: 2500, acquisitionDate: "2024-12-05" }
-            ],
-            2: [
-                { id: 201, name: "Карманные часы Omega", category: "Часы", price: 45000, acquisitionDate: "2024-05-20" },
-                { id: 202, name: "Наручные часы Longines", category: "Часы", price: 78000, acquisitionDate: "2024-07-12" },
-                { id: 203, name: "Секундомер", category: "Аксессуары", price: 12500, acquisitionDate: "2024-03-04" }
-            ],
-            3: [
-                { id: 301, name: "Фото 'Невский проспект'", category: "Фотография", price: 5600, acquisitionDate: "2025-01-18" },
-                { id: 302, name: "Снимок 'Эрмитаж'", category: "Фотография", price: 4200, acquisitionDate: "2025-02-10" },
-                { id: 303, name: "Серия 'Петербургские дворики'", category: "Фотография", price: 8900, acquisitionDate: "2025-02-28" },
-                { id: 304, name: "Фото 'Развод мостов'", category: "Фотография", price: 6700, acquisitionDate: "2025-03-05" }
-            ],
-            4: [
-                { id: 401, name: "Картина 'Абстракция'", category: "Живопись", price: 25000, acquisitionDate: "2024-12-01" },
-                { id: 402, name: "Скульптура 'Сфера'", category: "Скульптура", price: 18000, acquisitionDate: "2024-11-15" },
-                { id: 403, name: "Инсталляция", category: "Арт-объект", price: 32000, acquisitionDate: "2024-10-20" }
-            ],
-            5: [
-                { id: 501, name: "Модель Cadillac 1959", category: "Модели", price: 5500, acquisitionDate: "2024-09-05" },
-                { id: 502, name: "Фото 'Ford Mustang'", category: "Фотография", price: 2300, acquisitionDate: "2024-08-22" },
-                { id: 503, name: "Каталог автомобилей", category: "Книги", price: 1500, acquisitionDate: "2024-07-30" },
-                { id: 504, name: "Постер 'Ferrari'", category: "Графика", price: 800, acquisitionDate: "2024-06-15" }
-            ],
-            6: [
-                { id: 601, name: "Фото 'Лебединое озеро'", category: "Фотография", price: 6700, acquisitionDate: "2025-02-14" },
-                { id: 602, name: "Афиша балета", category: "Графика", price: 1200, acquisitionDate: "2025-01-20" },
-                { id: 603, name: "Костюм балерины (мини)", category: "Аксессуары", price: 8900, acquisitionDate: "2024-12-05" }
-            ],
-            7: [
-                { id: 701, name: "Чертеж 'Колоннада'", category: "Архитектура", price: 3400, acquisitionDate: "2024-11-10" },
-                { id: 702, name: "Эскиз 'Фасад'", category: "Графика", price: 2800, acquisitionDate: "2024-10-18" },
-                { id: 703, name: "Альбом с чертежами", category: "Книги", price: 4500, acquisitionDate: "2024-09-25" },
-                { id: 704, name: "План усадьбы", category: "Архитектура", price: 1900, acquisitionDate: "2024-08-10" },
-                { id: 705, name: "Разрез здания", category: "Архитектура", price: 2300, acquisitionDate: "2024-07-05" }
-            ],
-            8: [
-                { id: 801, name: "Фото 'Суздаль'", category: "Фотография", price: 3200, acquisitionDate: "2025-02-01" },
-                { id: 802, name: "Сувенир 'Золотое кольцо'", category: "Сувениры", price: 900, acquisitionDate: "2025-01-15" },
-                { id: 803, name: "Карта маршрута", category: "Картография", price: 500, acquisitionDate: "2024-12-28" }
-            ],
-            9: [
-                { id: 901, name: "Статуэтка 'Балерина'", category: "Фарфор", price: 12500, acquisitionDate: "2024-08-10" },
-                { id: 902, name: "Ваза", category: "Фарфор", price: 8900, acquisitionDate: "2024-07-05" },
-                { id: 903, name: "Тарелка декоративная", category: "Фарфор", price: 3200, acquisitionDate: "2024-06-20" },
-                { id: 904, name: "Чайная пара", category: "Фарфор", price: 5600, acquisitionDate: "2024-05-15" }
-            ],
-            10: [
-                { id: 1001, name: "Фото 'Долина гейзеров'", category: "Фотография", price: 4800, acquisitionDate: "2025-02-22" },
-                { id: 1002, name: "Сувенир 'Вулкан'", category: "Сувениры", price: 1200, acquisitionDate: "2025-02-10" },
-                { id: 1003, name: "Альбом 'Камчатка'", category: "Книги", price: 2500, acquisitionDate: "2025-01-30" },
-                { id: 1004, name: "Фото 'Медведи'", category: "Фотография", price: 3900, acquisitionDate: "2025-01-15" },
-                { id: 1005, name: "Календарь 'Природа Камчатки'", category: "Графика", price: 600, acquisitionDate: "2024-12-20" }
-            ]
-        };
-
-        let currentSearchQuery = '';
-
-        function searchUsersByItem(query) {
-            if (!query.trim()) return [];
-            const q = query.trim().toLowerCase();
-            const results = [];
-            for (let user of users) {
-                const items = userItemsMap[user.id] || [];
-                const matched = items.filter(item => item.name.toLowerCase().includes(q));
-                if (matched.length > 0) {
-                    results.push({ user, matchedItems: matched });
-                }
-            }
-            return results;
+        function getAuthHeaders() {
+            const token = sessionStorage.getItem('token');
+            return token ? { 'Authorization': `Bearer ${token}` } : {};
         }
 
-        function renderUsers(results) {
-            const container = document.getElementById('usersContent');
-            const countSpan = document.getElementById('resultsCount');
-            if (!container) return;
-            if (!results || results.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-user-slash"></i><p>Пользователи не найдены</p><p class="empty-sub">Попробуйте изменить параметры поиска</p></div>`;
-                if (countSpan) countSpan.textContent = '0 пользователей';
-                return;
-            }
-            container.innerHTML = `<div class="users-grid">${results.map(res => {
-                const user = res.user;
-                const matchCount = res.matchedItems.length;
-                return `
-                <div class="user-card" data-id="${user.id}" data-query="${currentSearchQuery}">
-                    <div class="user-avatar">${escapeHtml(user.initials)}</div>
-                    <div class="user-info">
-                        <div class="user-name">${escapeHtml(user.name)}</div>
-                        <div class="user-stats">
-                            <span><i class="fas fa-image"></i> ${userItemsMap[user.id]?.length || 0} предметов</span>
-                            <span><i class="fas fa-search"></i> Найдено: ${matchCount}</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right" style="color: var(--gold);"></i>
-                </div>
-            `}).join('')}</div>`;
-            if (countSpan) countSpan.textContent = `${results.length} ${getDeclension(results.length, 'пользователь', 'пользователя', 'пользователей')}`;
-            
-            document.querySelectorAll('.user-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const userId = parseInt(card.dataset.id);
-                    const user = users.find(u => u.id === userId);
-                    const query = card.dataset.query;
-                    if (user) {
-                        openUserItemsModal(user, query);
-                    }
-                });
+        async function apiFetch(url, options = {}) {
+            const res = await fetch(`${API_BASE}${url}`, {
+                ...options,
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', ...getAuthHeaders(), ...options.headers }
             });
-        }
-
-        function openUserItemsModal(user, query) {
-            const modal = document.getElementById('userItemsModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalList = document.getElementById('modalItemsList');
-            const allItems = userItemsMap[user.id] || [];
-            let itemsToShow = allItems;
-            if (query && query.trim()) {
-                const q = query.trim().toLowerCase();
-                itemsToShow = allItems.filter(item => item.name.toLowerCase().includes(q));
+            if (res.status === 302 || res.redirected) {
+                sessionStorage.clear();
+                window.location.href = 'logReg.html';
+                throw new Error('Сессия истекла');
             }
-            modalTitle.textContent = `Коллекция ${user.name} (${itemsToShow.length} предметов)`;
-            if (itemsToShow.length === 0) {
-                modalList.innerHTML = '<div class="empty-state"><p>Нет предметов, соответствующих запросу.</p></div>';
-            } else {
-                modalList.innerHTML = `
-                    <table class="items-table">
-                        <thead><tr><th>Название</th><th>Категория</th><th>Стоимость</th><th>Дата</th><th></th></tr></thead>
-                        <tbody>
-                            ${itemsToShow.map(item => `
-                                <tr>
-                                    <td>${escapeHtml(item.name)}</td>
-                                    <td>${escapeHtml(item.category)}</td>
-                                    <td>${formatPrice(item.price)}</td>
-                                    <td>${formatDate(item.acquisitionDate)}</td>
-                                    <td><button class="add-to-wishlist-btn" data-item='${JSON.stringify(item)}'><i class="fas fa-heart"></i> В желаемое</button></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-                document.querySelectorAll('.add-to-wishlist-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const itemData = JSON.parse(btn.dataset.item);
-                        addToWishlist(itemData);
-                    });
-                });
+            if (res.status === 401) {
+                sessionStorage.clear();
+                window.location.href = 'logReg.html';
+                throw new Error('Не авторизован');
             }
-            modal.classList.add('active');
-        }
-
-        function addToWishlist(item) {
-            let wishlist = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
-            if (!wishlist.some(w => w.id === item.id)) {
-                const newItem = {
-                    id: item.id,
-                    name: item.name,
-                    category: item.category,
-                    price: item.price,
-                    acquisitionDate: item.acquisitionDate
-                };
-                wishlist.push(newItem);
-                localStorage.setItem('wishlistItems', JSON.stringify(wishlist));
-                showNotification('Добавлено в желаемое');
-            } else {
-                showNotification('Уже в желаемом', '#D1664A');
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.message || err.error || `Ошибка ${res.status}`);
             }
+            const data = await res.json();
+            if (data && typeof data === 'object' && Array.isArray(data.items)) {
+                return data.items;
+            }
+            return data;
         }
 
         function formatDate(dateStr) {
@@ -369,6 +193,13 @@
 
         function formatPrice(price) {
             return new Intl.NumberFormat('ru-RU').format(price) + " ₽";
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
         function showNotification(message, bgColor = '#2C4A3E') {
@@ -403,11 +234,117 @@
             return five;
         }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+        async function searchUsersByItem(query) {
+            if (!query.trim()) return [];
+            const q = query.trim().toLowerCase();
+            const users = await apiFetch('/api/users/');
+            const currentUserId = parseInt(sessionStorage.getItem('userId'));
+            const results = [];
+            for (const user of users) {
+                if (user.id === currentUserId) continue;
+                try {
+                    const items = await apiFetch(`/api/users/${user.id}/items/`);
+                    const matched = items.filter(item => item.name.toLowerCase().includes(q));
+                    if (matched.length) {
+                        results.push({ user, matchedItems: matched });
+                    }
+                } catch (err) {
+                    console.warn(`Ошибка загрузки предметов пользователя ${user.id}:`, err);
+                }
+            }
+            return results;
+        }
+
+        async function addToWishlist(userId, item) {
+            try {
+                await apiFetch(`/api/users/${userId}/items/${item.id}/wishlist/`, { method: 'POST' });
+                showNotification('Добавлено в желаемое');
+                localStorage.setItem('wishlistChanged', Date.now().toString());
+            } catch (err) {
+                showNotification('Ошибка: ' + err.message, '#D1664A');
+            }
+        }
+
+        function renderUsers(results) {
+            const container = document.getElementById('usersContent');
+            const countSpan = document.getElementById('resultsCount');
+            if (!container) return;
+            if (!results || results.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-user-slash"></i><p>Пользователи не найдены</p><p class="empty-sub">Попробуйте изменить параметры поиска</p></div>`;
+                if (countSpan) countSpan.textContent = '0 пользователей';
+                return;
+            }
+            container.innerHTML = `<div class="users-grid">${results.map(res => {
+                const user = res.user;
+                const matchCount = res.matchedItems.length;
+                return `
+                <div class="user-card" data-user-id="${user.id}" data-query="${currentSearchQuery}">
+                    <div class="user-avatar">${escapeHtml(user.initials || user.username.slice(0,2).toUpperCase())}</div>
+                    <div class="user-info">
+                        <div class="user-name">${escapeHtml(user.username)}</div>
+                        <div class="user-stats">
+                            <span><i class="fas fa-image"></i> ${user.total_items || '?'} предметов</span>
+                            <span><i class="fas fa-search"></i> Найдено: ${matchCount}</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--gold);"></i>
+                </div>
+            `}).join('')}</div>`;
+            if (countSpan) countSpan.textContent = `${results.length} ${getDeclension(results.length, 'пользователь', 'пользователя', 'пользователей')}`;
+            
+            document.querySelectorAll('.user-card').forEach(card => {
+                card.addEventListener('click', async () => {
+                    const userId = parseInt(card.dataset.userId);
+                    const query = card.dataset.query;
+                    await openUserItemsModal(userId, query);
+                });
+            });
+        }
+
+        async function openUserItemsModal(userId, query) {
+            const modal = document.getElementById('userItemsModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalList = document.getElementById('modalItemsList');
+            try {
+                const user = await apiFetch(`/api/users/${userId}/`);
+                let items = await apiFetch(`/api/users/${userId}/items/`);
+                if (query && query.trim()) {
+                    const q = query.trim().toLowerCase();
+                    items = items.filter(item => item.name.toLowerCase().includes(q));
+                }
+                modalTitle.textContent = `Коллекция ${user.username} (${items.length} предметов)`;
+                if (items.length === 0) {
+                    modalList.innerHTML = '<div class="empty-state"><p>Нет предметов, соответствующих запросу.</p></div>';
+                } else {
+                    modalList.innerHTML = `
+                        <table class="items-table">
+                            <thead><tr><th>Название</th><th>Категория</th><th>Стоимость</th><th>Дата</th><th></th></tr></thead>
+                            <tbody>
+                                ${items.map(item => `
+                                    <tr>
+                                        <td>${escapeHtml(item.name)}</td>
+                                        <td>${escapeHtml(item.category)}</td>
+                                        <td>${formatPrice(item.price)}</td>
+                                        <td>${formatDate(item.acquisition_date)}</td>
+                                        <td><button class="add-to-wishlist-btn" data-user-id="${userId}" data-item='${JSON.stringify(item)}'><i class="fas fa-heart"></i> В желаемое</button></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    document.querySelectorAll('.add-to-wishlist-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const userId = parseInt(btn.dataset.userId);
+                            const item = JSON.parse(btn.dataset.item);
+                            addToWishlist(userId, item);
+                        });
+                    });
+                }
+                modal.classList.add('active');
+            } catch (err) {
+                alert('Ошибка загрузки: ' + err.message);
+            }
         }
 
         function closeModal(id) {
@@ -415,19 +352,20 @@
         }
         window.closeModal = closeModal;
 
-        function performSearch() {
+        let currentSearchQuery = '';
+
+        async function performSearch() {
             const searchInput = document.getElementById('searchInput');
             currentSearchQuery = searchInput?.value || '';
-            const results = searchUsersByItem(currentSearchQuery);
-            renderUsers(results);
+            const container = document.getElementById('usersContent');
+            container.innerHTML = '<div class="skeleton skeleton-card" style="height: 100px;"></div>';
+            try {
+                const results = await searchUsersByItem(currentSearchQuery);
+                renderUsers(results);
+            } catch (err) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Ошибка поиска: ${err.message}</p></div>`;
+            }
         }
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-        `;
-        document.head.appendChild(style);
 
         const mainElement = document.querySelector('main');
         const collapseMenuBtn = document.getElementById('collapseMenuBtn');
@@ -445,19 +383,27 @@
                 trigger.style.minHeight = Math.min(Math.max(mainCont.offsetHeight, 250), 700) + 'px';
             }
         }
-        
-        window.addEventListener('load', () => {
-            const container = document.getElementById('usersContent');
-            if (container) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><p>Введите название предмета для поиска</p></div>`;
-                document.getElementById('resultsCount').textContent = '0 пользователей';
+
+        window.addEventListener('load', async () => {
+            if (!sessionStorage.getItem('userId') && !sessionStorage.getItem('token')) {
+                window.location.href = 'logReg.html';
+                return;
             }
+            document.getElementById('usersContent').innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><p>Введите название предмета для поиска</p></div>`;
+            document.getElementById('resultsCount').textContent = '0 пользователей';
             adjustTriggerHeight();
         });
         window.addEventListener('resize', adjustTriggerHeight);
 
         document.getElementById('searchBtn')?.addEventListener('click', performSearch);
         document.getElementById('searchInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
