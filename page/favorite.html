@@ -11,20 +11,37 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
-        :root { --old-green: #2C4A3E; --old-gold: #B68B40; --old-gold-light: #DAB066; --old-cream: #FAF6F0; --old-charcoal: #2E2B28; --old-border: #E2D9CF; --old-shadow: rgba(44,42,40,0.08); --old-card-bg: #FFFFFF; }
-        main { flex: 1; display: grid; grid-template-columns: 2fr 10fr; gap: 20px; padding: 20px; background-color: #F5F0E8; transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
+        :root {
+            --bg-page: #F5F0E8;
+            --text-primary: #2C2B28;
+            --card-bg: #FFFFFF;
+            --card-bg-alt: #FAF6F0;
+            --border-color: #E2D9CF;
+            --shadow: rgba(44,42,40,0.08);
+            --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%);
+            --footer-bg: #2E2B28;
+            --footer-text: #DDD2C2;
+            --btn-primary: #2C4A3E;
+            --btn-primary-hover: #B68B40;
+            --gold: #B68B40;
+            --gold-light: #DAB066;
+            --green: #2C4A3E;
+            --green-light: #3F6B58;
+            --input-bg: #FAF6F0;
+        }
+        main { flex: 1; display: grid; grid-template-columns: 2fr 10fr; gap: 20px; padding: 20px; background-color: var(--bg-page); transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
         main.menu-collapsed { grid-template-columns: auto 10fr; }
-        header { background: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
+        header { background: var(--header-bg); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
         .header-logo { display: flex; align-items: baseline; gap: 8px; cursor: pointer; transition: transform 0.3s ease; }
         .header-logo:hover { transform: scale(1.02); }
-        .logo-icon { font-size: 36px; color: var(--old-gold); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .logo-icon { font-size: 36px; color: var(--gold); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         .logo-text { font-size: 32px; font-weight: 600; font-family: 'Cormorant Garamond', serif; color: #FAF6F0; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-        .logo-sub { font-size: 12px; font-family: 'Inter', sans-serif; letter-spacing: 2px; color: var(--old-gold-light); margin-left: 4px; }
-        footer { background-color: var(--old-charcoal); width: 100%; height: 48px; flex-shrink: 0; color: #DDD2C2; display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--old-gold); font-size: 13px; }
+        .logo-sub { font-size: 12px; font-family: 'Inter', sans-serif; letter-spacing: 2px; color: var(--gold-light); margin-left: 4px; }
+        footer { background-color: var(--footer-bg); width: 100%; height: 48px; flex-shrink: 0; color: var(--footer-text); display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--gold); font-size: 13px; }
         .burger-container { position: relative; display: flex; align-items: center; min-height: 100%; width: 100%; }
         .burger { display: flex; flex-direction: column; gap: 15px; padding: 10px; width: 100%; transition: opacity 0.4s cubic-bezier(0.2,0.9,0.4,1.1), transform 0.4s cubic-bezier(0.2,0.9,0.4,1.1); opacity: 1; transform: translateX(0); }
-        .burger-trigger { display: none; width: 60px; height: auto; min-height: 300px; background: linear-gradient(135deg,#2C4A3E,#3F6B58); border-radius: 15px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1.1); box-shadow: 4px 4px 12px rgba(0,0,0,0.15); writing-mode: vertical-rl; text-orientation: mixed; font-size: 16px; font-weight: 600; color: #FAF6F0; align-items: center; justify-content: center; gap: 12px; border: 1px solid var(--old-gold); position: relative; overflow: hidden; opacity: 0; transform: scale(0.95); flex-shrink: 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; }
-        .burger-trigger:hover { transform: scale(1.02); background: linear-gradient(135deg,#3F6B58,#2C4A3E); border-color: var(--old-gold-light); }
+        .burger-trigger { display: none; width: 60px; height: auto; min-height: 300px; background: var(--header-bg); border-radius: 15px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1.1); box-shadow: 4px 4px 12px var(--shadow); writing-mode: vertical-rl; text-orientation: mixed; font-size: 16px; font-weight: 600; color: #FAF6F0; align-items: center; justify-content: center; gap: 12px; border: 1px solid var(--gold); position: relative; overflow: hidden; opacity: 0; transform: scale(0.95); flex-shrink: 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; }
+        .burger-trigger:hover { transform: scale(1.02); background: linear-gradient(135deg,#3F6B58,#2C4A3E); border-color: var(--gold-light); }
         .burger-trigger .trigger-icon { font-size: 32px; writing-mode: horizontal-tb; display: inline-block; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         .menu-collapsed .burger-container .burger-trigger { display: flex; animation: triggerSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
@@ -35,64 +52,31 @@
         @keyframes menuSlideIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
         .burger-container .burger-trigger { animation: triggerSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
         @keyframes triggerSlideOut { 0% { opacity: 1; transform: scale(1) translateX(0); display: flex; } 100% { opacity: 0; transform: scale(0.95) translateX(-10px); display: none; } }
-        .burger button { cursor: pointer; padding: 12px 20px; border: 2px solid var(--old-green); border-radius: 15px; text-align: center; background-color: #FAF6F0; font-size: 18px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); font-family: 'Inter', sans-serif; box-shadow: 2px 2px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; width: 100%; justify-content: flex-start; color: #2C4A3E; font-weight: 500; }
-        .burger button:hover { transform: translateX(5px) scale(1.02); color: var(--old-gold); background-color: #FFFFFF; border-color: var(--old-gold); }
-        .mainContainer { background-color: #FFFFFF; border: 1px solid var(--old-border); border-radius: 20px; padding: 24px; overflow-y: auto; min-height: 200px; display: flex; flex-direction: column; gap: 20px; width: 100%; box-shadow: 0 4px 12px var(--old-shadow); }
-        .page-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 16px; border-bottom: 2px solid var(--old-border); margin-bottom: 8px; }
-        .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--old-green); letter-spacing: 1px; }
-        .wishlist-count { font-size: 14px; color: var(--old-gold); background: rgba(182,139,64,0.1); padding: 6px 12px; border-radius: 40px; font-weight: 500; }
-        .wishlist-items-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .wishlist-item {
-            border: 1px solid var(--old-border);
-            border-radius: 16px;
-            padding: 18px 24px;
-            display: grid;
-            grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 0.5fr;
-            align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: #FAF6F0;
-            gap: 12px;
-        }
-        .wishlist-item:hover {
-            background: linear-gradient(97deg, #FAF6F0 0%, #FFFFFF 100%);
-            transform: translateX(6px) scale(1.01);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-            border-color: var(--old-gold);
-        }
-        .item-name { font-weight: 600; font-size: 17px; color: var(--old-green); font-family: 'Cormorant Garamond', serif; }
+        .burger button { cursor: pointer; padding: 12px 20px; border: 2px solid var(--green); border-radius: 15px; text-align: center; background-color: var(--card-bg-alt); font-size: 18px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); font-family: 'Inter', sans-serif; box-shadow: 2px 2px 6px var(--shadow); display: flex; align-items: center; gap: 10px; width: 100%; justify-content: flex-start; color: var(--green); font-weight: 500; }
+        .burger button:hover { transform: translateX(5px) scale(1.02); color: var(--gold); background-color: var(--card-bg); border-color: var(--gold); }
+        .mainContainer { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; overflow-y: auto; min-height: 200px; display: flex; flex-direction: column; gap: 20px; width: 100%; box-shadow: 0 4px 12px var(--shadow); }
+        .page-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 16px; border-bottom: 2px solid var(--border-color); margin-bottom: 8px; }
+        .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--green); letter-spacing: 1px; }
+        .wishlist-count { font-size: 14px; color: var(--gold); background: rgba(182,139,64,0.1); padding: 6px 12px; border-radius: 40px; font-weight: 500; }
+        .wishlist-items-container { display: flex; flex-direction: column; gap: 16px; }
+        .wishlist-item { border: 1px solid var(--border-color); border-radius: 16px; padding: 18px 24px; display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr 0.5fr; align-items: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background-color: var(--card-bg-alt); gap: 12px; }
+        .wishlist-item:hover { background: linear-gradient(97deg, var(--card-bg-alt) 0%, var(--card-bg) 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 6px 16px var(--shadow); border-color: var(--gold); }
+        .item-name { font-weight: 600; font-size: 17px; color: var(--green); font-family: 'Cormorant Garamond', serif; }
         .item-category { text-align: left; font-weight: 500; color: #5C6E5A; }
-        .item-price { text-align: left; font-weight: 500; color: var(--old-gold); }
+        .item-price { text-align: left; font-weight: 500; color: var(--gold); }
         .item-date { text-align: left; font-size: 13px; color: #9B8E7C; }
         .item-actions { display: flex; gap: 8px; justify-content: flex-end; }
-        .action-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            color: #C9BFAE;
-            font-size: 18px;
-            transition: all 0.2s;
-            padding: 8px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .action-btn { background: transparent; border: none; cursor: pointer; color: #C9BFAE; font-size: 18px; transition: all 0.2s; padding: 8px; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
         .action-btn:hover { transform: scale(1.1); }
-        .add-to-collection-btn:hover { color: var(--old-gold); background-color: rgba(182,139,64,0.1); }
+        .add-to-collection-btn:hover { color: var(--gold); background-color: rgba(182,139,64,0.1); }
         .remove-btn:hover { color: #D1664A; background-color: rgba(209,102,74,0.1); }
         .empty-state { text-align: center; padding: 80px 40px; color: #9B8E7C; }
-        .empty-state i { font-size: 80px; margin-bottom: 24px; opacity: 0.5; color: var(--old-gold); }
-        .browse-btn { margin-top: 24px; padding: 12px 32px; background: var(--old-green); color: white; border: none; border-radius: 40px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
-        .browse-btn:hover { background: var(--old-gold); transform: translateY(-2px); }
-        .skeleton { background: linear-gradient(90deg,#F5F0E8 25%,#E8E2D8 50%,#F5F0E8 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 15px; }
+        .empty-state i { font-size: 80px; margin-bottom: 24px; opacity: 0.5; color: var(--gold); }
+        .browse-btn { margin-top: 24px; padding: 12px 32px; background: var(--btn-primary); color: white; border: none; border-radius: 40px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+        .browse-btn:hover { background: var(--btn-primary-hover); transform: translateY(-2px); }
+        .skeleton { background: linear-gradient(90deg,var(--card-bg-alt) 25%,var(--border-color) 50%,var(--card-bg-alt) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 15px; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .skeleton-element { border: 1px solid var(--old-border); border-radius: 16px; padding: 20px; height: 100px; }
+        .skeleton-element { border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; height: 100px; }
         @media (max-width: 768px) {
             main { grid-template-columns: 1fr; gap: 15px; }
             main.menu-collapsed { grid-template-columns: 1fr; }
@@ -130,7 +114,7 @@
 
         <div class="mainContainer" id="mainContainer">
             <div class="page-header">
-                <h1><i class="fas fa-heart" style="color: var(--old-gold); margin-right: 12px;"></i> Желаемое</h1>
+                <h1><i class="fas fa-heart" style="color: var(--gold); margin-right: 12px;"></i> Желаемое</h1>
                 <span class="wishlist-count" id="wishlistCount">0 предметов</span>
             </div>
             <div id="wishlistContent">
@@ -265,7 +249,7 @@
                 font-size: 14px;
                 z-index: 1000;
                 animation: slideIn 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 12px var(--shadow);
             `;
             document.body.appendChild(notif);
             setTimeout(() => {
@@ -314,6 +298,13 @@
             }
         }
 
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'wishlistItems') {
+                loadWishlistFromStorage();
+                renderWishlist();
+            }
+        });
+        
         window.addEventListener('load', () => {
             loadWishlistFromStorage();
             renderWishlist();
