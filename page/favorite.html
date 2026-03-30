@@ -41,6 +41,11 @@
         .page-header { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 16px; border-bottom: 2px solid var(--old-border); margin-bottom: 8px; }
         .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--old-green); letter-spacing: 1px; }
         .wishlist-count { font-size: 14px; color: var(--old-gold); background: rgba(182,139,64,0.1); padding: 6px 12px; border-radius: 40px; font-weight: 500; }
+        .wishlist-items-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
         .wishlist-item {
             border: 1px solid var(--old-border);
             border-radius: 16px;
@@ -115,8 +120,6 @@
                 <button type="button" onclick="window.location.href='main.html';"><i class="fas fa-home"></i> Главная</button>
                 <button type="button" class="active"><i class="fas fa-heart"></i> Желаемое</button>
                 <button type="button" onclick="window.location.href='search.html';"><i class="fas fa-search"></i> Поиск</button>
-                <button type="button" id="createCollectionBtn"><i class="fas fa-pen-fancy"></i> Создать коллекцию</button>
-                <button type="button" id="importBtn"><i class="fas fa-upload"></i> Импорт</button>
                 <button type="button" id="collapseMenuBtn"><i class="fas fa-compress-alt"></i> Свернуть</button>
             </div>
             <div class="burger-trigger" id="expandMenuBtn">
@@ -151,10 +154,10 @@
                 wishlistItems = JSON.parse(stored);
             } else {
                 wishlistItems = [
-                    { id: 1, name: "Винтажная камера Leica M3", category: "Фотография", price: 185000, acquisitionDate: "2025-03-01", collection: "Винтажные фотографии" },
-                    { id: 2, name: "Картина 'Осенний парк'", category: "Живопись", price: 45000, acquisitionDate: "2025-02-15", collection: "Природа и пейзажи" },
-                    { id: 3, name: "Архитектурный эскиз 'Зимний дворец'", category: "Графика", price: 28900, acquisitionDate: "2025-01-10", collection: "Архитектурные шедевры" },
-                    { id: 4, name: "Скульптура 'Мыслитель' миниатюра", category: "Скульптура", price: 12500, acquisitionDate: "2024-12-05", collection: "Современное искусство" }
+                    { id: 1, name: "Винтажная камера Leica M3", category: "Фотография", price: 185000, acquisitionDate: "2025-03-01" },
+                    { id: 2, name: "Картина 'Осенний парк'", category: "Живопись", price: 45000, acquisitionDate: "2025-02-15" },
+                    { id: 3, name: "Архитектурный эскиз 'Зимний дворец'", category: "Графика", price: 28900, acquisitionDate: "2025-01-10" },
+                    { id: 4, name: "Скульптура 'Мыслитель' миниатюра", category: "Скульптура", price: 12500, acquisitionDate: "2024-12-05" }
                 ];
                 saveWishlistToStorage();
             }
@@ -190,18 +193,22 @@
                 if (countSpan) countSpan.textContent = '0 предметов';
                 return;
             }
-            container.innerHTML = wishlistItems.map(item => `
-                <div class="wishlist-item" data-id="${item.id}">
-                    <span class="item-name">${escapeHtml(item.name)}</span>
-                    <span class="item-category">${escapeHtml(item.category || 'Без категории')}</span>
-                    <span class="item-price">${formatPrice(item.price)}</span>
-                    <span class="item-date">${formatDate(item.acquisitionDate)}</span>
-                    <div class="item-actions">
-                        <button class="action-btn add-to-collection-btn" data-id="${item.id}" title="Добавить в коллекцию"><i class="fas fa-plus-circle"></i></button>
-                        <button class="action-btn remove-btn" data-id="${item.id}" title="Удалить"><i class="fas fa-times"></i></button>
-                    </div>
+            container.innerHTML = `
+                <div class="wishlist-items-container">
+                    ${wishlistItems.map(item => `
+                        <div class="wishlist-item" data-id="${item.id}">
+                            <span class="item-name">${escapeHtml(item.name)}</span>
+                            <span class="item-category">${escapeHtml(item.category || 'Без категории')}</span>
+                            <span class="item-price">${formatPrice(item.price)}</span>
+                            <span class="item-date">${formatDate(item.acquisitionDate)}</span>
+                            <div class="item-actions">
+                                <button class="action-btn add-to-collection-btn" data-id="${item.id}" title="Добавить в коллекцию"><i class="fas fa-plus-circle"></i></button>
+                                <button class="action-btn remove-btn" data-id="${item.id}" title="Удалить"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
-            `).join('');
+            `;
             if (countSpan) countSpan.textContent = `${wishlistItems.length} ${getDeclension(wishlistItems.length, 'предмет', 'предмета', 'предметов')}`;
             
             document.querySelectorAll('.add-to-collection-btn').forEach(btn => {
@@ -229,8 +236,7 @@
                 name: item.name,
                 category: item.category || 'Другое',
                 price: item.price,
-                acquisitionDate: item.acquisitionDate || new Date().toISOString().slice(0,10),
-                description: `Из списка желаний (источник: ${item.collection || 'неизвестен'})`
+                acquisitionDate: item.acquisitionDate || new Date().toISOString().slice(0,10)
             };
             collection.push(newItem);
             localStorage.setItem('collectionItems', JSON.stringify(collection));
@@ -314,9 +320,6 @@
             adjustTriggerHeight();
         });
         window.addEventListener('resize', adjustTriggerHeight);
-
-        document.getElementById('createCollectionBtn')?.addEventListener('click', () => alert('✨ Создание новой коллекции в стиле Old Money\nВы сможете добавить в неё избранные предметы'));
-        document.getElementById('importBtn')?.addEventListener('click', () => alert('📤 Импорт изображений\nВыберите файлы для добавления в ваши коллекции'));
     </script>
 </body>
 </html>

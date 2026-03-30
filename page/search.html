@@ -49,16 +49,14 @@
         .search-btn:hover { background: var(--old-gold); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .results-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
         .results-count { font-size: 14px; color: var(--old-gold); background: rgba(182,139,64,0.1); padding: 6px 14px; border-radius: 40px; font-weight: 500; }
-        .collections-grid { display: flex; flex-direction: column; gap: 16px; }
-        .collection-card { border: 1px solid var(--old-border); border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); background-color: #FAF6F0; }
-        .collection-card:hover { background: linear-gradient(97deg,#FAF6F0 0%,#FFFFFF 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: var(--old-gold); }
-        .collection-icon { width: 60px; height: 60px; background: linear-gradient(135deg,#2C4A3E,#3F6B58); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--old-gold); font-size: 28px; }
-        .collection-info { flex: 1; }
-        .collection-name { font-weight: 600; font-size: 20px; color: var(--old-green); font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; }
-        .collection-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #8F826C; }
-        .author-info { display: flex; align-items: center; gap: 8px; background: rgba(182,139,64,0.1); padding: 8px 16px; border-radius: 40px; }
-        .author-avatar { width: 32px; height: 32px; background: var(--old-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--old-gold); font-size: 14px; }
-        .author-name { font-weight: 500; font-size: 14px; color: var(--old-green); }
+        .users-grid { display: flex; flex-direction: column; gap: 16px; }
+        .user-card { border: 1px solid var(--old-border); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); background-color: #FAF6F0; }
+        .user-card:hover { background: linear-gradient(97deg,#FAF6F0 0%,#FFFFFF 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: var(--old-gold); }
+        .user-avatar { width: 60px; height: 60px; background: linear-gradient(135deg,#2C4A3E,#3F6B58); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--old-gold); font-size: 24px; font-weight: 600; }
+        .user-info { flex: 1; }
+        .user-name { font-weight: 600; font-size: 20px; color: var(--old-green); font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; }
+        .user-stats { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #8F826C; }
+        .user-stats span { display: flex; align-items: center; gap: 6px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,42,40,0.85); z-index: 2000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
         .modal-content { background: #FFFFFF; border-radius: 24px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; animation: modalSlide 0.3s ease; border: 1px solid var(--old-gold); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
@@ -81,9 +79,8 @@
             main.menu-collapsed { grid-template-columns: 1fr; }
             .burger { flex-direction: row; flex-wrap: wrap; justify-content: center; }
             .burger button { width: auto; min-width: 120px; justify-content: center; }
-            .collection-card { grid-template-columns: 1fr; text-align: center; gap: 16px; }
-            .collection-icon { margin: 0 auto; }
-            .author-info { justify-content: center; }
+            .user-card { flex-direction: column; text-align: center; gap: 16px; }
+            .user-stats { justify-content: center; }
             .search-box-wrapper { flex-direction: column; }
             .search-btn { width: 100%; justify-content: center; }
             .items-table th, .items-table td { padding: 8px; font-size: 12px; }
@@ -105,8 +102,6 @@
                 <button type="button" onclick="window.location.href='main.html';"><i class="fas fa-home"></i> Главная</button>
                 <button type="button" onclick="window.location.href='favorite.html';"><i class="fas fa-heart"></i> Желаемое</button>
                 <button type="button" class="active"><i class="fas fa-search"></i> Поиск</button>
-                <button type="button" id="createCollectionBtn"><i class="fas fa-pen-fancy"></i> Создать коллекцию</button>
-                <button type="button" id="importBtn"><i class="fas fa-upload"></i> Импорт</button>
                 <button type="button" id="collapseMenuBtn"><i class="fas fa-compress-alt"></i> Свернуть</button>
             </div>
             <div class="burger-trigger" id="expandMenuBtn">
@@ -117,22 +112,22 @@
 
         <div class="mainContainer" id="mainContainer">
             <div class="page-header">
-                <h1><i class="fas fa-search"></i> Поиск коллекций</h1>
+                <h1><i class="fas fa-search"></i> Поиск пользователей</h1>
             </div>
             <div class="search-section">
                 <div class="search-box-wrapper">
                     <div class="search-input-group">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" id="searchInput" placeholder="Поиск по названию коллекции, автору или тегам...">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Поиск по имени пользователя или тегам...">
                     </div>
                     <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> Найти</button>
                 </div>
             </div>
             <div class="results-header">
-                <div class="results-count" id="resultsCount">0 коллекций</div>
-                <div style="font-size: 13px; color: #8F826C;"><i class="fas fa-users"></i> Коллекции других пользователей</div>
+                <div class="results-count" id="resultsCount">0 пользователей</div>
+                <div style="font-size: 13px; color: #8F826C;"><i class="fas fa-users"></i> Коллекционеры Old Money</div>
             </div>
-            <div id="collectionsContent">
+            <div id="usersContent">
                 <div class="skeleton skeleton-card" style="height: 100px; margin-bottom: 16px;"></div>
                 <div class="skeleton skeleton-card" style="height: 100px; margin-bottom: 16px;"></div>
                 <div class="skeleton skeleton-card" style="height: 100px;"></div>
@@ -141,7 +136,7 @@
     </main>
 
     <footer>
-        <span>© 2025 OLD MONEY — Открытые коллекции со всего мира</span>
+        <span>© 2025 OLD MONEY — Сообщество коллекционеров</span>
     </footer>
 
     <!-- Модальное окно для просмотра предметов пользователя -->
@@ -158,91 +153,97 @@
     </div>
 
     <script>
-        let allCollections = [];
-        let filteredCollections = [];
-        let currentSearchQuery = '';
+        // Данные пользователей с реальным количеством предметов
+        const users = [
+            { id: 1, name: "Екатерина Волконская", initials: "ЕВ", tags: ["пейзаж", "осень", "усадьбы"] },
+            { id: 2, name: "Дмитрий Строганов", initials: "ДС", tags: ["часы", "антиквариат", "история"] },
+            { id: 3, name: "Анна Михайлова", initials: "АМ", tags: ["улица", "город", "архитектура"] },
+            { id: 4, name: "Константин Орлов", initials: "КО", tags: ["живопись", "современное искусство"] },
+            { id: 5, name: "Павел Шереметьев", initials: "ПШ", tags: ["автомобили", "винтаж", "ретро"] },
+            { id: 6, name: "Мария Кшесинская", initials: "МК", tags: ["балет", "театр", "искусство"] },
+            { id: 7, name: "Алексей Воронихин", initials: "АВ", tags: ["архитектура", "чертежи", "классицизм"] },
+            { id: 8, name: "Татьяна Ларина", initials: "ТЛ", tags: ["путешествия", "россия", "монастыри"] },
+            { id: 9, name: "Сергей Кузнецов", initials: "СК", tags: ["фарфор", "коллекционирование"] },
+            { id: 10, name: "Игорь Петров", initials: "ИП", tags: ["природа", "пейзаж", "вулканы"] }
+        ];
 
+        // Реальные предметы пользователей с разным количеством
         const userItemsMap = {
-            1: [
+            1: [ // 5 предметов
                 { id: 101, name: "Фотография 'Золотая аллея'", category: "Фотография", price: 3500, acquisitionDate: "2024-09-10" },
                 { id: 102, name: "Этюд 'Осенний парк'", category: "Живопись", price: 12000, acquisitionDate: "2024-08-15" },
-                { id: 103, name: "Старинная открытка", category: "Графика", price: 800, acquisitionDate: "2024-10-01" }
+                { id: 103, name: "Старинная открытка", category: "Графика", price: 800, acquisitionDate: "2024-10-01" },
+                { id: 104, name: "Пейзаж 'Туманное утро'", category: "Живопись", price: 7500, acquisitionDate: "2024-11-20" },
+                { id: 105, name: "Альбом 'Усадьбы России'", category: "Книги", price: 2500, acquisitionDate: "2024-12-05" }
             ],
-            2: [
+            2: [ // 3 предмета
                 { id: 201, name: "Карманные часы Omega", category: "Часы", price: 45000, acquisitionDate: "2024-05-20" },
                 { id: 202, name: "Наручные часы Longines", category: "Часы", price: 78000, acquisitionDate: "2024-07-12" },
                 { id: 203, name: "Секундомер", category: "Аксессуары", price: 12500, acquisitionDate: "2024-03-04" }
             ],
-            3: [
+            3: [ // 4 предмета
                 { id: 301, name: "Фото 'Невский проспект'", category: "Фотография", price: 5600, acquisitionDate: "2025-01-18" },
                 { id: 302, name: "Снимок 'Эрмитаж'", category: "Фотография", price: 4200, acquisitionDate: "2025-02-10" },
-                { id: 303, name: "Серия 'Петербургские дворики'", category: "Фотография", price: 8900, acquisitionDate: "2025-02-28" }
+                { id: 303, name: "Серия 'Петербургские дворики'", category: "Фотография", price: 8900, acquisitionDate: "2025-02-28" },
+                { id: 304, name: "Фото 'Развод мостов'", category: "Фотография", price: 6700, acquisitionDate: "2025-03-05" }
             ],
-            4: [
+            4: [ // 3 предмета
                 { id: 401, name: "Картина 'Абстракция'", category: "Живопись", price: 25000, acquisitionDate: "2024-12-01" },
                 { id: 402, name: "Скульптура 'Сфера'", category: "Скульптура", price: 18000, acquisitionDate: "2024-11-15" },
                 { id: 403, name: "Инсталляция", category: "Арт-объект", price: 32000, acquisitionDate: "2024-10-20" }
             ],
-            5: [
+            5: [ // 4 предмета
                 { id: 501, name: "Модель Cadillac 1959", category: "Модели", price: 5500, acquisitionDate: "2024-09-05" },
                 { id: 502, name: "Фото 'Ford Mustang'", category: "Фотография", price: 2300, acquisitionDate: "2024-08-22" },
-                { id: 503, name: "Каталог автомобилей", category: "Книги", price: 1500, acquisitionDate: "2024-07-30" }
+                { id: 503, name: "Каталог автомобилей", category: "Книги", price: 1500, acquisitionDate: "2024-07-30" },
+                { id: 504, name: "Постер 'Ferrari'", category: "Графика", price: 800, acquisitionDate: "2024-06-15" }
             ],
-            6: [
+            6: [ // 3 предмета
                 { id: 601, name: "Фото 'Лебединое озеро'", category: "Фотография", price: 6700, acquisitionDate: "2025-02-14" },
                 { id: 602, name: "Афиша балета", category: "Графика", price: 1200, acquisitionDate: "2025-01-20" },
                 { id: 603, name: "Костюм балерины (мини)", category: "Аксессуары", price: 8900, acquisitionDate: "2024-12-05" }
             ],
-            7: [
+            7: [ // 5 предметов
                 { id: 701, name: "Чертеж 'Колоннада'", category: "Архитектура", price: 3400, acquisitionDate: "2024-11-10" },
                 { id: 702, name: "Эскиз 'Фасад'", category: "Графика", price: 2800, acquisitionDate: "2024-10-18" },
-                { id: 703, name: "Альбом с чертежами", category: "Книги", price: 4500, acquisitionDate: "2024-09-25" }
+                { id: 703, name: "Альбом с чертежами", category: "Книги", price: 4500, acquisitionDate: "2024-09-25" },
+                { id: 704, name: "План усадьбы", category: "Архитектура", price: 1900, acquisitionDate: "2024-08-10" },
+                { id: 705, name: "Разрез здания", category: "Архитектура", price: 2300, acquisitionDate: "2024-07-05" }
             ],
-            8: [
+            8: [ // 3 предмета
                 { id: 801, name: "Фото 'Суздаль'", category: "Фотография", price: 3200, acquisitionDate: "2025-02-01" },
                 { id: 802, name: "Сувенир 'Золотое кольцо'", category: "Сувениры", price: 900, acquisitionDate: "2025-01-15" },
                 { id: 803, name: "Карта маршрута", category: "Картография", price: 500, acquisitionDate: "2024-12-28" }
             ],
-            9: [
+            9: [ // 4 предмета
                 { id: 901, name: "Статуэтка 'Балерина'", category: "Фарфор", price: 12500, acquisitionDate: "2024-08-10" },
                 { id: 902, name: "Ваза", category: "Фарфор", price: 8900, acquisitionDate: "2024-07-05" },
-                { id: 903, name: "Тарелка декоративная", category: "Фарфор", price: 3200, acquisitionDate: "2024-06-20" }
+                { id: 903, name: "Тарелка декоративная", category: "Фарфор", price: 3200, acquisitionDate: "2024-06-20" },
+                { id: 904, name: "Чайная пара", category: "Фарфор", price: 5600, acquisitionDate: "2024-05-15" }
             ],
-            10: [
+            10: [ // 5 предметов
                 { id: 1001, name: "Фото 'Долина гейзеров'", category: "Фотография", price: 4800, acquisitionDate: "2025-02-22" },
                 { id: 1002, name: "Сувенир 'Вулкан'", category: "Сувениры", price: 1200, acquisitionDate: "2025-02-10" },
-                { id: 1003, name: "Альбом 'Камчатка'", category: "Книги", price: 2500, acquisitionDate: "2025-01-30" }
+                { id: 1003, name: "Альбом 'Камчатка'", category: "Книги", price: 2500, acquisitionDate: "2025-01-30" },
+                { id: 1004, name: "Фото 'Медведи'", category: "Фотография", price: 3900, acquisitionDate: "2025-01-15" },
+                { id: 1005, name: "Календарь 'Природа Камчатки'", category: "Графика", price: 600, acquisitionDate: "2024-12-20" }
             ]
         };
 
-        async function fetchPublicCollections() {
-            await new Promise(resolve => setTimeout(resolve, 800));
-            return [
-                { id: 1, name: "Золотая осень в усадьбах", itemCount: 47, author: "Екатерина Волконская", authorInitials: "ЕВ", category: "photo", popularity: 156, date: "2025-02-15", tags: ["пейзаж", "осень", "усадьбы"] },
-                { id: 2, name: "Антикварные часы XIX века", itemCount: 23, author: "Дмитрий Строганов", authorInitials: "ДС", category: "art", popularity: 89, date: "2025-01-20", tags: ["часы", "антиквариат", "история"] },
-                { id: 3, name: "Уличная фотография: Петербург", itemCount: 112, author: "Анна Михайлова", authorInitials: "АМ", category: "photo", popularity: 234, date: "2025-02-28", tags: ["улица", "город", "архитектура"] },
-                { id: 4, name: "Современная живопись: новые имена", itemCount: 56, author: "Константин Орлов", authorInitials: "КО", category: "art", popularity: 178, date: "2025-02-10", tags: ["живопись", "современное искусство"] },
-                { id: 5, name: "Винтажные автомобили 1950-60х", itemCount: 34, author: "Павел Шереметьев", authorInitials: "ПШ", category: "popular", popularity: 312, date: "2025-01-05", tags: ["автомобили", "винтаж", "ретро"] },
-                { id: 6, name: "Балет в объективе", itemCount: 78, author: "Мария Кшесинская", authorInitials: "МК", category: "photo", popularity: 267, date: "2025-02-25", tags: ["балет", "театр", "искусство"] },
-                { id: 7, name: "Архитектурные эскизы классицизма", itemCount: 41, author: "Алексей Воронихин", authorInitials: "АВ", category: "art", popularity: 145, date: "2025-01-30", tags: ["архитектура", "чертежи", "классицизм"] },
-                { id: 8, name: "Путешествие по Золотому кольцу", itemCount: 95, author: "Татьяна Ларина", authorInitials: "ТЛ", category: "popular", popularity: 198, date: "2025-02-18", tags: ["путешествия", "россия", "монастыри"] },
-                { id: 9, name: "Фарфоровые статуэтки", itemCount: 29, author: "Сергей Кузнецов", authorInitials: "СК", category: "art", popularity: 67, date: "2025-01-12", tags: ["фарфор", "коллекционирование"] },
-                { id: 10, name: "Природа Камчатки", itemCount: 203, author: "Игорь Петров", authorInitials: "ИП", category: "photo", popularity: 421, date: "2025-02-22", tags: ["природа", "пейзаж", "вулканы"] }
-            ];
-        }
+        let filteredUsers = [];
+        let currentSearchQuery = '';
 
-        function filterCollections() {
-            let result = [...allCollections];
+        function filterUsers() {
+            let result = [...users];
             if (currentSearchQuery.trim()) {
                 const query = currentSearchQuery.toLowerCase().trim();
-                result = result.filter(c => 
-                    c.name.toLowerCase().includes(query) ||
-                    c.author.toLowerCase().includes(query) ||
-                    c.tags.some(tag => tag.toLowerCase().includes(query))
+                result = result.filter(user => 
+                    user.name.toLowerCase().includes(query) ||
+                    user.tags.some(tag => tag.toLowerCase().includes(query))
                 );
             }
-            filteredCollections = result;
-            renderCollections(result);
+            filteredUsers = result;
+            renderUsers(result);
         }
 
         function formatDate(dateStr) {
@@ -255,52 +256,49 @@
             return new Intl.NumberFormat('ru-RU').format(price) + " ₽";
         }
 
-        function renderCollections(collections) {
-            const container = document.getElementById('collectionsContent');
+        function renderUsers(users) {
+            const container = document.getElementById('usersContent');
             const countSpan = document.getElementById('resultsCount');
             if (!container) return;
-            if (!collections || collections.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-folder-open"></i><p>Ничего не найдено</p><p class="empty-sub">Попробуйте изменить параметры поиска</p></div>`;
-                if (countSpan) countSpan.textContent = '0 коллекций';
+            if (!users || users.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-user-slash"></i><p>Пользователи не найдены</p><p class="empty-sub">Попробуйте изменить параметры поиска</p></div>`;
+                if (countSpan) countSpan.textContent = '0 пользователей';
                 return;
             }
-            container.innerHTML = `<div class="collections-grid">${collections.map(c => `
-                <div class="collection-card" data-id="${c.id}">
-                    <div class="collection-icon"><i class="fas ${c.category === 'photo' ? 'fa-camera' : c.category === 'art' ? 'fa-palette' : 'fa-star'}"></i></div>
-                    <div class="collection-info">
-                        <div class="collection-name">${escapeHtml(c.name)}</div>
-                        <div class="collection-meta">
-                            <span><i class="fas fa-image"></i> ${c.itemCount} предметов</span>
-                            <span><i class="fas fa-calendar"></i> ${formatDate(c.date)}</span>
-                            <span><i class="fas fa-heart"></i> ${c.popularity}</span>
-                            <span><i class="fas fa-tag"></i> ${c.tags.slice(0,2).map(t=>escapeHtml(t)).join(', ')}</span>
+            container.innerHTML = `<div class="users-grid">${users.map(user => {
+                const itemCount = (userItemsMap[user.id] || []).length;
+                return `
+                <div class="user-card" data-id="${user.id}">
+                    <div class="user-avatar">${escapeHtml(user.initials)}</div>
+                    <div class="user-info">
+                        <div class="user-name">${escapeHtml(user.name)}</div>
+                        <div class="user-stats">
+                            <span><i class="fas fa-image"></i> ${itemCount} предметов</span>
+                            <span><i class="fas fa-tag"></i> ${user.tags.slice(0,3).map(t=>escapeHtml(t)).join(', ')}</span>
                         </div>
                     </div>
-                    <div class="author-info">
-                        <div class="author-avatar">${escapeHtml(c.authorInitials)}</div>
-                        <div class="author-name">${escapeHtml(c.author)}</div>
-                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--old-gold);"></i>
                 </div>
-            `).join('')}</div>`;
-            if (countSpan) countSpan.textContent = `${collections.length} ${getDeclension(collections.length, 'коллекция', 'коллекции', 'коллекций')}`;
+            `}).join('')}</div>`;
+            if (countSpan) countSpan.textContent = `${users.length} ${getDeclension(users.length, 'пользователь', 'пользователя', 'пользователей')}`;
             
-            document.querySelectorAll('.collection-card').forEach(card => {
+            document.querySelectorAll('.user-card').forEach(card => {
                 card.addEventListener('click', () => {
                     const id = parseInt(card.dataset.id);
-                    const collection = allCollections.find(c => c.id === id);
-                    if (collection) {
-                        openUserItemsModal(collection);
+                    const user = users.find(u => u.id === id);
+                    if (user) {
+                        openUserItemsModal(user);
                     }
                 });
             });
         }
 
-        function openUserItemsModal(collection) {
+        function openUserItemsModal(user) {
             const modal = document.getElementById('userItemsModal');
             const modalTitle = document.getElementById('modalTitle');
             const modalList = document.getElementById('modalItemsList');
-            modalTitle.textContent = `Предметы: ${collection.name}`;
-            const items = userItemsMap[collection.id] || [];
+            const items = userItemsMap[user.id] || [];
+            modalTitle.textContent = `Коллекция ${user.name} (${items.length} предметов)`;
             if (items.length === 0) {
                 modalList.innerHTML = '<div class="empty-state"><p>У этого пользователя пока нет предметов в коллекции.</p></div>';
             } else {
@@ -334,14 +332,12 @@
         function addToWishlist(item) {
             let wishlist = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
             if (!wishlist.some(w => w.id === item.id)) {
-                // Сохраняем в том же формате, как в main.html
                 const newItem = {
                     id: item.id,
                     name: item.name,
                     category: item.category,
                     price: item.price,
-                    acquisitionDate: item.acquisitionDate,
-                    collection: "Из поиска"
+                    acquisitionDate: item.acquisitionDate
                 };
                 wishlist.push(newItem);
                 localStorage.setItem('wishlistItems', JSON.stringify(wishlist));
@@ -395,25 +391,18 @@
         }
         window.closeModal = closeModal;
 
-        async function loadCollections() {
-            try {
-                const container = document.getElementById('collectionsContent');
-                if (container) {
-                    container.innerHTML = `<div class="skeleton skeleton-card" style="height:100px; margin-bottom:16px;"></div><div class="skeleton skeleton-card" style="height:100px; margin-bottom:16px;"></div><div class="skeleton skeleton-card" style="height:100px;"></div>`;
-                }
-                allCollections = await fetchPublicCollections();
-                filterCollections();
-            } catch (error) {
-                console.error(error);
-                document.getElementById('collectionsContent').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки</p><button class="search-btn" onclick="location.reload()">Обновить</button></div>`;
-            }
-        }
-
         function performSearch() {
             const searchInput = document.getElementById('searchInput');
             currentSearchQuery = searchInput?.value || '';
-            filterCollections();
+            filterUsers();
         }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
 
         const mainElement = document.querySelector('main');
         const collapseMenuBtn = document.getElementById('collapseMenuBtn');
@@ -433,15 +422,13 @@
         }
 
         window.addEventListener('load', () => {
-            loadCollections();
+            filterUsers();
             adjustTriggerHeight();
         });
         window.addEventListener('resize', adjustTriggerHeight);
 
         document.getElementById('searchBtn')?.addEventListener('click', performSearch);
         document.getElementById('searchInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
-        document.getElementById('createCollectionBtn')?.addEventListener('click', () => alert('✨ Создание новой коллекции\nДелитесь своими произведениями с сообществом Old Money'));
-        document.getElementById('importBtn')?.addEventListener('click', () => alert('📤 Импорт изображений\nДобавьте новые работы в свою коллекцию'));
     </script>
 </body>
 </html>

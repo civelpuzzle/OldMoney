@@ -489,6 +489,20 @@
             box-shadow: 0 0 0 3px rgba(182, 139, 64, 0.2);
         }
         
+        .category-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .category-row .form-select {
+            flex: 1;
+        }
+        
+        .category-row .form-input {
+            flex: 2;
+        }
+        
         .form-actions {
             display: flex;
             gap: 1rem;
@@ -599,6 +613,9 @@
                 text-align: center;
                 justify-self: center;
             }
+            .category-row {
+                flex-direction: column;
+            }
             .report-options {
                 grid-template-columns: 1fr;
             }
@@ -667,7 +684,21 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Категория / Тип коллекции</label>
-                    <input type="text" class="form-input" id="itemCategory" placeholder="Например: Рубашка, Часы, Живопись" required>
+                    <div class="category-row">
+                        <select class="form-select" id="categorySelect">
+                            <option value="">Выберите из списка</option>
+                            <option value="Часы">Часы</option>
+                            <option value="Живопись">Живопись</option>
+                            <option value="Фотография">Фотография</option>
+                            <option value="Скульптура">Скульптура</option>
+                            <option value="Книги">Книги</option>
+                            <option value="Монеты">Монеты</option>
+                            <option value="Аксессуары">Аксессуары</option>
+                            <option value="Одежда">Одежда</option>
+                            <option value="Антиквариат">Антиквариат</option>
+                        </select>
+                        <input type="text" class="form-input" id="itemCategory" placeholder="Или введите свою категорию">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Стоимость (₽)</label>
@@ -757,9 +788,9 @@
             } else {
                 items = [
                     { id: 1, name: "Рубашка Louis Vuitton", category: "Одежда", price: 10000, acquisitionDate: "2005-10-10" },
-                    { id: 2, name: "Картина 'Старый особняк'", category: "Искусство", price: 450000, acquisitionDate: "2023-05-15" },
+                    { id: 2, name: "Картина 'Старый особняк'", category: "Живопись", price: 450000, acquisitionDate: "2023-05-15" },
                     { id: 3, name: "Часы Patek Philippe", category: "Часы", price: 1250000, acquisitionDate: "2024-02-20" },
-                    { id: 4, name: "Монета 1898 года", category: "Нумизматика", price: 95000, acquisitionDate: "2024-01-10" },
+                    { id: 4, name: "Монета 1898 года", category: "Монеты", price: 95000, acquisitionDate: "2024-01-10" },
                     { id: 5, name: "Кожаный портфель Hermès", category: "Аксессуары", price: 340000, acquisitionDate: "2025-03-01" }
                 ];
                 saveItemsToStorage();
@@ -814,7 +845,6 @@
                 });
             });
             
-            // Убираем alert при клике на карточку — ничего не делаем
             updateStats();
         }
         
@@ -885,10 +915,25 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         window.closeModal = closeModal;
         
+        // Обработка выбора категории
+        const categorySelect = document.getElementById('categorySelect');
+        const categoryInput = document.getElementById('itemCategory');
+        
+        if (categorySelect && categoryInput) {
+            categorySelect.addEventListener('change', () => {
+                if (categorySelect.value) {
+                    categoryInput.value = categorySelect.value;
+                }
+            });
+        }
+        
         document.getElementById('addItemForm')?.addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('itemName').value.trim();
-            const category = document.getElementById('itemCategory').value.trim();
+            let category = document.getElementById('itemCategory').value.trim();
+            if (!category && categorySelect.value) {
+                category = categorySelect.value;
+            }
             const price = parseFloat(document.getElementById('itemPrice').value);
             const date = document.getElementById('itemDate').value;
             if (!name || !category || isNaN(price) || !date) return;
@@ -897,7 +942,7 @@
             saveItemsToStorage();
             renderItems();
             closeModal('addItemModal');
-            e.target.reset();
+            document.getElementById('addItemForm').reset();
             showNotification('Предмет добавлен');
         });
         
