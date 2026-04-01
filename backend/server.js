@@ -11,7 +11,7 @@ const JWT_SECRET = 'old_money_secret_key_change_in_production';
 
 // Middleware
 app.use(cors({
-    origin: true, // разрешаем любые источники для разработки
+    origin: true,
     credentials: true
 }));
 app.use(express.json());
@@ -21,7 +21,6 @@ const db = new sqlite3.Database('./database.sqlite');
 
 // Инициализация таблиц
 db.serialize(() => {
-    // Пользователи
     db.run(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -29,7 +28,6 @@ db.serialize(() => {
         registration_date TEXT DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    // Предметы коллекции
     db.run(`CREATE TABLE IF NOT EXISTS items (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
@@ -40,7 +38,6 @@ db.serialize(() => {
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )`);
 
-    // Список желаемого (копия предмета)
     db.run(`CREATE TABLE IF NOT EXISTS wishlist (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
@@ -86,7 +83,6 @@ app.post('/api/register/',
         }
         const { username, password } = req.body;
         try {
-            // Проверка существования пользователя
             db.get('SELECT id FROM users WHERE username = ?', [username], async (err, row) => {
                 if (err) return res.status(500).json({ error: 'Ошибка БД' });
                 if (row) return res.status(400).json({ error: 'Пользователь уже существует' });
@@ -163,20 +159,17 @@ app.post('/api/users/:userId/items/:itemId/wishlist/', authenticate, (req, res) 
     const itemId = req.params.itemId;
     const currentUserId = req.userId;
 
-    // Проверяем, что предмет существует и принадлежит targetUserId
     db.get('SELECT name, category, price, acquisition_date FROM items WHERE id = ? AND user_id = ?',
         [itemId, targetUserId], (err, item) => {
             if (err) return res.status(500).json({ error: 'Ошибка БД' });
             if (!item) return res.status(404).json({ error: 'Предмет не найден или не принадлежит указанному пользователю' });
 
-            // Проверяем, нет ли уже такого предмета в wishlist (по original_item_id)
             db.get('SELECT id FROM wishlist WHERE user_id = ? AND original_item_id = ?',
                 [currentUserId, itemId], (err, existing) => {
                     if (err) return res.status(500).json({ error: 'Ошибка БД' });
                     if (existing) {
                         return res.status(400).json({ error: 'Предмет уже в желаемом' });
                     }
-                    // Копируем в wishlist
                     db.run(`INSERT INTO wishlist (user_id, name, category, price, acquisition_date, original_item_id)
                             VALUES (?, ?, ?, ?, ?, ?)`,
                         [currentUserId, item.name, item.category, item.price, item.acquisition_date, itemId],
@@ -221,6 +214,10 @@ app.post('/api/items/create/', authenticate, (req, res) => {
     const { name, category, price, acquisitionDate } = req.body;
     if (!name || !category || price === undefined || !acquisitionDate) {
         return res.status(400).json({ error: 'Не все поля заполнены' });
+    }
+    // Проверка на положительную стоимость
+    if (isNaN(price) || price <= 0) {
+        return res.status(400).json({ error: 'Стоимость должна быть положительным числом' });
     }
     db.run('INSERT INTO items (user_id, name, category, price, acquisition_date) VALUES (?, ?, ?, ?, ?)',
         [req.userId, name, category, price, acquisitionDate], function(err) {
@@ -279,7 +276,6 @@ app.get('/api/export/', authenticate, (req, res) => {
         params.push(to);
     }
 
-    // Сортировка
     switch (sort) {
         case 'date-asc': sql += ' ORDER BY acquisition_date ASC'; break;
         case 'price-desc': sql += ' ORDER BY price DESC'; break;
@@ -300,7 +296,6 @@ app.get('/api/export/', authenticate, (req, res) => {
             res.setHeader('Content-Disposition', `attachment; filename="old_money_export_${Date.now()}.csv"`);
             return res.send(csv);
         } else {
-            // JSON
             res.setHeader('Content-Type', 'application/json');
             res.setHeader('Content-Disposition', `attachment; filename="old_money_export_${Date.now()}.json"`);
             return res.json(rows);

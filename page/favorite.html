@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Стили без изменений (как в оригинале) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
         :root { --bg-page: #F5F0E8; --text-primary: #2C2B28; --card-bg: #FFFFFF; --card-bg-alt: #FAF6F0; --border-color: #E2D9CF; --shadow: rgba(44,42,40,0.08); --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); --footer-bg: #2E2B28; --footer-text: #DDD2C2; --btn-primary: #2C4A3E; --btn-primary-hover: #B68B40; --gold: #B68B40; --gold-light: #DAB066; --green: #2C4A3E; --green-light: #3F6B58; --input-bg: #FAF6F0; }
@@ -54,8 +53,6 @@
         .action-btn:hover { transform: scale(1.1); }
         .add-to-collection-btn:hover { color: var(--gold); background-color: rgba(182,139,64,0.1); }
         .remove-btn:hover { color: #D1664A; background-color: rgba(209,102,74,0.1); }
-        .empty-state .browse-btn { background: var(--btn-primary); color: #FAF6F0; border: none; border-radius: 60px; padding: 12px 28px; font-size: 16px; font-weight: 500; display: inline-flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; margin-top: 28px; font-family: 'Inter', sans-serif; box-shadow: 0 2px 8px var(--shadow); }
-        .empty-state .browse-btn:hover { background: var(--btn-primary-hover); transform: translateY(-2px); box-shadow: 0 6px 14px var(--shadow); color: var(--text-primary); }
         .empty-state { text-align: center; padding: 80px 40px; color: #9B8E7C; }
         .empty-state i { font-size: 80px; margin-bottom: 24px; opacity: 0.5; color: var(--gold); }
         .skeleton { background: linear-gradient(90deg,var(--card-bg-alt) 25%,var(--border-color) 50%,var(--card-bg-alt) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 15px; }
@@ -202,29 +199,6 @@
             return div.innerHTML;
         }
 
-        function showNotification(message, bgColor = '#2C4A3E') {
-            const notif = document.createElement('div');
-            notif.textContent = message;
-            notif.style.cssText = `
-                position: fixed;
-                bottom: 80px;
-                right: 20px;
-                background: ${bgColor};
-                color: white;
-                padding: 12px 24px;
-                border-radius: 40px;
-                font-size: 14px;
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-                box-shadow: 0 4px 12px var(--shadow);
-            `;
-            document.body.appendChild(notif);
-            setTimeout(() => {
-                notif.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notif.remove(), 300);
-            }, 2000);
-        }
-
         function getDeclension(n, one, two, five) {
             n = Math.abs(n) % 100;
             if (n >= 5 && n <= 20) return five;
@@ -241,7 +215,6 @@
                 renderWishlist();
             } catch (err) {
                 console.error(err);
-                showNotification('Ошибка загрузки желаемого', '#D1664A');
             }
         }
 
@@ -249,10 +222,9 @@
             try {
                 await apiFetch(`/api/wishlist/${id}/`, { method: 'DELETE' });
                 await loadWishlist();
-                showNotification('Удалено из желаемого', '#D1664A');
                 localStorage.setItem('wishlistChanged', Date.now().toString());
             } catch (err) {
-                alert('Ошибка удаления: ' + err.message);
+                console.error(err);
             }
         }
 
@@ -282,10 +254,9 @@
                     })
                 });
                 await removeFromWishlist(wishlistItem.id);
-                showNotification('Добавлено в коллекцию с датой ' + formatDate(acquisitionDate));
                 localStorage.setItem('collectionChanged', Date.now().toString());
             } catch (err) {
-                alert('Ошибка: ' + err.message);
+                console.error(err);
             }
         }
 
@@ -299,7 +270,6 @@
                         <i class="far fa-heart"></i>
                         <p>Ваш список желаемого пуст</p>
                         <p class="empty-sub">Добавляйте понравившиеся предметы из поиска</p>
-                        <button class="browse-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i> Исследовать коллекции</button>
                     </div>
                 `;
                 if (countSpan) countSpan.textContent = '0 предметов';
@@ -343,10 +313,7 @@
         document.getElementById('confirmDateBtn').addEventListener('click', async () => {
             if (pendingAddItem) {
                 const newDate = document.getElementById('acquisitionDatePicker').value;
-                if (!newDate) {
-                    showNotification('Выберите дату', '#D1664A');
-                    return;
-                }
+                if (!newDate) return;
                 await addToMainCollectionWithDate(pendingAddItem, newDate);
                 closeDateModal();
             }
