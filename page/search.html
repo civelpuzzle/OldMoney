@@ -137,7 +137,7 @@
     </main>
 
     <footer>
-        <span>© 2025 OLD MONEY — Сообщество коллекционеров</span>
+        <span>© 2026 OLD MONEY — Сообщество коллекционеров</span>
     </footer>
 
     <div class="modal" id="userItemsModal">
@@ -178,7 +178,12 @@
                 const err = await res.json().catch(() => ({}));
                 throw new Error(err.message || err.error || `Ошибка ${res.status}`);
             }
+            // Обработка ответа без тела (204 No Content)
+            if (res.status === 204) {
+                return null;
+            }
             const data = await res.json();
+            // Если ответ содержит поле items (например, при запросе списка желаемого), возвращаем массив
             if (data && typeof data === 'object' && Array.isArray(data.items)) {
                 return data.items;
             }
