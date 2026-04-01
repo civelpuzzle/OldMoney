@@ -420,6 +420,7 @@
             });
         }
 
+        // ========== ИЗМЕНЕНИЯ: проверка цены при добавлении ==========
         document.getElementById('addItemForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('itemName').value.trim();
@@ -430,7 +431,10 @@
             const date = document.getElementById('itemDate').value;
             if (!name || !category || isNaN(price) || !date) return;
             // Клиентская проверка цены
-            if (price <= 0) return;
+            if (price <= 0) {
+                alert('Стоимость предмета должна быть положительным числом!');
+                return;
+            }
             try {
                 await apiFetch('/api/items/create/', {
                     method: 'POST',
@@ -483,6 +487,7 @@
             }
         });
 
+        // ========== ИЗМЕНЕНИЯ: проверка цены при импорте ==========
         document.getElementById('importDataBtn').addEventListener('click', () => {
             const input = document.createElement('input');
             input.type = 'file';
@@ -515,8 +520,19 @@
                             }
                         }
                         if (!imported.length) throw new Error('Нет данных для импорта');
+
+                        // Фильтруем предметы с отрицательной ценой
+                        const validItems = imported.filter(item => item.price > 0);
+                        const skippedCount = imported.length - validItems.length;
+                        if (skippedCount > 0) {
+                            alert(`Пропущено ${skippedCount} записей с неположительной ценой.`);
+                        }
+                        if (validItems.length === 0) {
+                            throw new Error('Нет валидных предметов для импорта (цена должна быть > 0)');
+                        }
+
                         let success = 0;
-                        for (const item of imported) {
+                        for (const item of validItems) {
                             try {
                                 await apiFetch('/api/items/create/', {
                                     method: 'POST',
@@ -525,11 +541,13 @@
                                 success++;
                             } catch (err) { console.warn(err); }
                         }
+                        alert(`Импорт завершён. Добавлено ${success} предметов.`);
                         await loadItems();
                         closeModal('exportImportModal');
                         localStorage.setItem('collectionChanged', Date.now().toString());
                     } catch (err) {
                         console.error(err);
+                        alert('Ошибка импорта: ' + err.message);
                     }
                 };
                 reader.readAsText(file, 'UTF-8');

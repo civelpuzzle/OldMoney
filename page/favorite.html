@@ -242,7 +242,13 @@
             pendingAddItem = null;
         }
 
+        // ========== ИЗМЕНЕНИЯ: проверка цены при добавлении из желаемого ==========
         async function addToMainCollectionWithDate(wishlistItem, acquisitionDate) {
+            // Проверяем цену
+            if (wishlistItem.price <= 0) {
+                alert('Невозможно добавить предмет: цена должна быть положительным числом.');
+                return;
+            }
             try {
                 await apiFetch('/api/items/create/', {
                     method: 'POST',
