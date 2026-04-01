@@ -8,7 +8,85 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Стили без изменений (как в оригинале) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; display: flex; flex-direction: column; background-color: #F5F0E8; font-family: 'Inter', sans-serif; color: #2C2B28; }
+        :root { --bg-page: #F5F0E8; --text-primary: #2C2B28; --card-bg: #FFFFFF; --card-bg-alt: #FAF6F0; --border-color: #E2D9CF; --shadow: rgba(44,42,40,0.08); --header-bg: linear-gradient(97deg, #2C4A3E 0%, #3F6B58 100%); --footer-bg: #2E2B28; --footer-text: #DDD2C2; --btn-primary: #2C4A3E; --btn-primary-hover: #B68B40; --gold: #B68B40; --gold-light: #DAB066; --green: #2C4A3E; --green-light: #3F6B58; --input-bg: #FAF6F0; }
+        main { flex: 1; display: grid; grid-template-columns: 2fr 10fr; gap: 20px; padding: 20px; background-color: var(--bg-page); transition: grid-template-columns 0.4s cubic-bezier(0.2,0.9,0.4,1.1); }
+        main.menu-collapsed { grid-template-columns: auto 10fr; }
+        header { background: var(--header-bg); width: 100%; height: 117px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(182,139,64,0.3); }
+        .header-logo { display: flex; align-items: baseline; gap: 8px; cursor: pointer; transition: transform 0.3s ease; }
+        .header-logo:hover { transform: scale(1.02); }
+        .logo-icon { font-size: 36px; color: var(--gold); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        .logo-text { font-size: 32px; font-weight: 600; font-family: 'Cormorant Garamond', serif; color: #FAF6F0; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .logo-sub { font-size: 12px; font-family: 'Inter', sans-serif; letter-spacing: 2px; color: var(--gold-light); margin-left: 4px; }
+        footer { background-color: var(--footer-bg); width: 100%; height: 48px; flex-shrink: 0; color: var(--footer-text); display: flex; align-items: center; justify-content: center; border-top: 1px solid var(--gold); font-size: 13px; }
+        .burger-container { position: relative; display: flex; align-items: center; min-height: 100%; width: 100%; }
+        .burger { display: flex; flex-direction: column; gap: 15px; padding: 10px; width: 100%; transition: opacity 0.4s cubic-bezier(0.2,0.9,0.4,1.1), transform 0.4s cubic-bezier(0.2,0.9,0.4,1.1); opacity: 1; transform: translateX(0); }
+        .burger-trigger { display: none; width: 60px; height: auto; min-height: 300px; background: var(--header-bg); border-radius: 15px; cursor: pointer; transition: all 0.4s cubic-bezier(0.2,0.9,0.4,1.1); box-shadow: 4px 4px 12px var(--shadow); writing-mode: vertical-rl; text-orientation: mixed; font-size: 16px; font-weight: 600; color: #FAF6F0; align-items: center; justify-content: center; gap: 12px; border: 1px solid var(--gold); position: relative; overflow: hidden; opacity: 0; transform: scale(0.95); flex-shrink: 0; font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; }
+        .burger-trigger:hover { transform: scale(1.02); background: linear-gradient(135deg,#3F6B58,#2C4A3E); border-color: var(--gold-light); }
+        .burger-trigger .trigger-icon { font-size: 32px; writing-mode: horizontal-tb; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .menu-collapsed .burger-container .burger-trigger { display: flex; animation: triggerSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
+        @keyframes triggerSlideIn { 0% { opacity: 0; transform: scale(0.95) translateX(-10px); } 100% { opacity: 1; transform: scale(1) translateX(0); } }
+        .menu-collapsed .burger-container .burger { animation: menuSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; display: none; }
+        @keyframes menuSlideOut { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(-20px); } }
+        .burger-container .burger { animation: menuSlideIn 0.5s cubic-bezier(0.2,0.9,0.4,1.1); }
+        @keyframes menuSlideIn { 0% { opacity: 0; transform: translateX(-20px); } 100% { opacity: 1; transform: translateX(0); } }
+        .burger-container .burger-trigger { animation: triggerSlideOut 0.4s cubic-bezier(0.2,0.9,0.4,1.1) forwards; }
+        @keyframes triggerSlideOut { 0% { opacity: 1; transform: scale(1) translateX(0); display: flex; } 100% { opacity: 0; transform: scale(0.95) translateX(-10px); display: none; } }
+        .burger button { cursor: pointer; padding: 12px 20px; border: 2px solid var(--green); border-radius: 15px; text-align: center; background-color: var(--card-bg-alt); font-size: 18px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); font-family: 'Inter', sans-serif; box-shadow: 2px 2px 6px var(--shadow); display: flex; align-items: center; gap: 10px; width: 100%; justify-content: flex-start; color: var(--green); font-weight: 500; }
+        .burger button:hover { transform: translateX(5px) scale(1.02); color: var(--gold); background-color: var(--card-bg); border-color: var(--gold); }
+        .mainContainer { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; overflow-y: auto; min-height: 200px; display: flex; flex-direction: column; gap: 20px; width: 100%; box-shadow: 0 4px 12px var(--shadow); }
+        .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--green); letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .search-section { margin-bottom: 28px; }
+        .search-box-wrapper { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .search-input-group { flex: 1; position: relative; }
+        .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid var(--border-color); border-radius: 60px; font-size: 16px; font-family: 'Inter', sans-serif; background: var(--input-bg); transition: all 0.3s; color: var(--text-primary); }
+        .search-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(182,139,64,0.2); background: var(--card-bg); }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 18px; }
+        .search-btn { padding: 14px 32px; background: var(--btn-primary); color: white; border: none; border-radius: 60px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; }
+        .search-btn:hover { background: var(--btn-primary-hover); transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow); }
+        .results-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        .results-count { font-size: 14px; color: var(--gold); background: rgba(182,139,64,0.1); padding: 6px 14px; border-radius: 40px; font-weight: 500; }
+        .users-grid { display: flex; flex-direction: column; gap: 16px; }
+        .user-card { border: 1px solid var(--border-color); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); background-color: var(--card-bg-alt); }
+        .user-card:hover { background: linear-gradient(97deg,var(--card-bg-alt) 0%,var(--card-bg) 100%); transform: translateX(6px) scale(1.01); box-shadow: 0 6px 16px var(--shadow); border-color: var(--gold); }
+        .user-avatar { width: 60px; height: 60px; background: linear-gradient(135deg,var(--green),var(--green-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 24px; font-weight: 600; }
+        .user-info { flex: 1; }
+        .user-name { font-weight: 600; font-size: 20px; color: var(--green); font-family: 'Cormorant Garamond', serif; margin-bottom: 8px; }
+        .user-stats { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #8F826C; }
+        .user-stats span { display: flex; align-items: center; gap: 6px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(44,42,40,0.85); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--card-bg); border-radius: 24px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; animation: modalSlide 0.3s ease; border: 1px solid var(--gold); box-shadow: 0 20px 40px var(--shadow); }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--green); }
+        .modal-close { background: none; border: none; font-size: 1.8rem; color: #9B8E7C; cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: var(--gold); }
+        .items-table { width: 100%; border-collapse: collapse; }
+        .items-table th, .items-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .items-table th { font-weight: 600; color: var(--green); background: var(--card-bg-alt); }
+        .add-to-wishlist-btn { background: var(--gold); color: white; border: none; border-radius: 40px; padding: 6px 12px; font-size: 12px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .add-to-wishlist-btn:hover { background: var(--green); transform: scale(1.02); }
+        .empty-state { text-align: center; padding: 60px 40px; color: #9B8E7C; }
+        .skeleton { background: linear-gradient(90deg,var(--card-bg-alt) 25%,var(--border-color) 50%,var(--card-bg-alt) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 16px; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-card { height: 100px; }
+        @media (max-width: 768px) {
+            main { grid-template-columns: 1fr; gap: 15px; }
+            main.menu-collapsed { grid-template-columns: 1fr; }
+            .burger { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .burger button { width: auto; min-width: 120px; justify-content: center; }
+            .user-card { flex-direction: column; text-align: center; gap: 16px; }
+            .user-stats { justify-content: center; }
+            .search-box-wrapper { flex-direction: column; }
+            .search-btn { width: 100%; justify-content: center; }
+            .items-table th, .items-table td { padding: 8px; font-size: 12px; }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -100,10 +178,12 @@
                 const err = await res.json().catch(() => ({}));
                 throw new Error(err.message || err.error || `Ошибка ${res.status}`);
             }
+            // Обработка ответа без тела (204 No Content)
             if (res.status === 204) {
                 return null;
             }
             const data = await res.json();
+            // Если ответ содержит поле items (например, при запросе списка желаемого), возвращаем массив
             if (data && typeof data === 'object' && Array.isArray(data.items)) {
                 return data.items;
             }
@@ -322,6 +402,13 @@
 
         document.getElementById('searchBtn')?.addEventListener('click', performSearch);
         document.getElementById('searchInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
